@@ -35,4 +35,5 @@ libraryDependencies ++= {
 }
 
 
-fork in run := true
+fork in run := false
+cancelable in Global := true

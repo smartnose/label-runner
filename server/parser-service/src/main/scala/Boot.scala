@@ -24,6 +24,9 @@ object Main extends App with RouteConcatenation {
     createOauthClients <- modules.oauthClientsDal.insert(Seq(
       OAuthClient(0, 1, "client_credentials", "bob_client_id", "bob_client_secret", Some("redirectUrl"), new Timestamp(new DateTime().getMillis))))
   } yield {
+    println(createAccounts.toString())
+    println(createAccounts.headOption)
+    println(createOauthClients)
     println(s"Database initialized with default values for bob and alice")
   }
 
