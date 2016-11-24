@@ -23,6 +23,10 @@ libraryDependencies ++= {
   )
 }
 
+lazy val core = RootProject(file("../../parsing"))
+
+val main = Project(id = "server-lite", base = file(".")).dependsOn(core)
+
 Revolver.settings
 
 
