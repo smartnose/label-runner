@@ -30,7 +30,8 @@ libraryDependencies ++= {
     "com.nulab-inc" %% "scala-oauth2-core" % "0.17.2",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
     "ch.qos.logback" % "logback-classic" % "1.1.3",
-    "org.slf4j" % "slf4j-nop" % "1.6.4"
+    "org.slf4j" % "slf4j-nop" % "1.6.4",
+    "mysql" % "mysql-connector-java" % "5.1.40"
   )
 }
 

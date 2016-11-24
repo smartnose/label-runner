@@ -8,6 +8,8 @@ import persistence.entities.{Account, OAuthClient}
 import rest.OAuthRoutes
 import utils._
 
+import scala.concurrent.Future
+
 object Main extends App with RouteConcatenation {
   // configuring modules for application, cake pattern for DI
   val modules = new ConfigurationModuleImpl  with ActorModuleImpl with PersistenceModuleImpl
@@ -20,7 +22,12 @@ object Main extends App with RouteConcatenation {
   for {
     createAccounts <- modules.accountsDal.insert(Seq(
       Account(0, "bob@example.com", "48181acd22b3edaebc8a447868a7df7ce629920a", new Timestamp(new DateTime().getMillis)) // password:bob
-    ))
+    )) recoverWith {
+      case e: Exception => {
+        println(e.toString)
+        Future.failed(e)
+      }
+    }
     createOauthClients <- modules.oauthClientsDal.insert(Seq(
       OAuthClient(0, 1, "client_credentials", "bob_client_id", "bob_client_secret", Some("redirectUrl"), new Timestamp(new DateTime().getMillis))))
   } yield {

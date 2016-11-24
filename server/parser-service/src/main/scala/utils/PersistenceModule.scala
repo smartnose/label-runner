@@ -5,7 +5,7 @@ import persistence.entities._
 import persitence.handlers.OAuth2DataHandler
 import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scalaoauth2.provider.DataHandler
 
 
@@ -32,8 +32,8 @@ trait PersistenceModuleImpl extends PersistenceModule with DbModule{
 	this: Configuration  =>
 
 	// use an alternative database configuration ex:
-	// private val dbConfig : DatabaseConfig[JdbcProfile]  = DatabaseConfig.forConfig("pgdb")
-	private val dbConfig : DatabaseConfig[JdbcProfile]  = DatabaseConfig.forConfig("h2db")
+	private val dbConfig : DatabaseConfig[JdbcProfile]  = DatabaseConfig.forConfig("mysql")
+	// private val dbConfig : DatabaseConfig[JdbcProfile]  = DatabaseConfig.forConfig("h2db")
 
 	override implicit val profile: JdbcProfile = dbConfig.driver
 	override implicit val db: JdbcProfile#Backend#Database = dbConfig.db
@@ -45,7 +45,11 @@ trait PersistenceModuleImpl extends PersistenceModule with DbModule{
 	override val oauth2DataHandler = new OAuth2DataHandler(this)
 
 	override def generateDDL(): Unit = {
-		accountsDal.createTable()
+		accountsDal.createTable() recover {
+			case e: Exception => {
+				println(e.toString)
+			}
+		}
 		oauthAccessTokensDal.createTable()
 		oauthAuthorizationCodesDal.createTable()
 		oauthClientsDal.createTable()

@@ -52,3 +52,8 @@ There are examples in tests for getting tokens with authorization code and user 
 
 ##TODO
 I did TDD to make the upper layer, but since I imported the dals from my play-slick-oauth2 template, the unit tests for dals are still TODO.
+
+
+## Set up Postgres SQL database
+
+[See this post](https://www.tunnelsup.com/setting-up-postgres-on-mac-osx/)
