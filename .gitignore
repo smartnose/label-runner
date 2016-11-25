@@ -2,24 +2,5 @@
 server/parser-service/target
 server/parser-service/bin
 server/parser-service/libexec
+target
 
-
-s3://dev-datalake-zillowgroup/zillow/homerec/crossaccount-test/3?aws-role-arn=arn%3Aaws%3Aiam%3A%3A170606514770%3Arole%2Fdev-homerec
-
-test = spark.read.csv('titanic.csv')
-test.write.csv('s3://zdevelopment/zbi-1280/data-delete-this13.csv')
-ssh -i aws_keys/ProductionEMREC2KeyPair.pem hadoop@ec2-54-70-238-135.us-west-2.compute.amazonaws.com
-scp -i ~/aws_keys/ProductionEMREC2KeyPair.pem target/data-lake-credential-provider-0.0.9-weil_credential-provider.b0614da.jar hadoop@ec2-54-70-238-135.us-west-2.compute.amazonaws.com:/home/hadoop
-
-<property>
-    <name>fs.s3.customAWSCredentialsProvider</name>
-    <value>com.zillow.zda.data_lake.credential.RoleBasedAWSCredentialProvider</value>
-  </property>
-  
-  ssh -i ~/personal_mac.pem hadoop@ec2-52-91-186-146.compute-1.amazonaws.com
-  
-  sudo mv data-lake-credential-provider-0.0.10-weil_credential-provider.9534481.jar /usr/lib/hadoop/lib/
-  
-  curl -0 http://samplecsvs.s3.amazonaws.com/SalesJan2009.csv > example.csv
-  
-  hadoop fs -put example.csv
