@@ -1,4 +1,4 @@
-name := """akka-http-rest-example"""
+name := """server-lite"""
 
 organization  := "com.github.pvoznenko"
 
@@ -24,6 +24,7 @@ libraryDependencies ++= {
 }
 
 lazy val core = RootProject(file("../../parsing"))
+
 
 val main = Project(id = "server-lite", base = file(".")).dependsOn(core)
 
