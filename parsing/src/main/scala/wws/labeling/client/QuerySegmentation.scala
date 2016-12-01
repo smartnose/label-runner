@@ -2,12 +2,12 @@ package wws.labeling.client
 
 object Segments {
 
-  case class ClientPosition(line: Int, column: Int, offset: Int)
+  case class ClientPosition(row: Int, col: Int, offset: Int)
 
   /**
     * Created by weil1 on 11/24/16.
     */
-  case class Segment(start: ClientPosition, end: ClientPosition, segmentKind: Int)
+  case class Segment(start: ClientPosition, end: ClientPosition, kind: Int)
 
   case class Segmentation(segments: List[Segment])
 

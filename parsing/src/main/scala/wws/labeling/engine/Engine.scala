@@ -3,7 +3,9 @@ package wws.labeling.engine
 import wws.labeling.client._
 import wws.tokenization.Lexer
 
-import scala.util.parsing.input.{OffsetPosition, Position}
+import scala.util.parsing.input.{OffsetPosition}
+import spray.json._
+import LabelerJsonProtocal._
 
 /**
   * Created by weil1 on 11/25/16.
@@ -12,6 +14,10 @@ object Engine {
 
   import Lexer._
   import Segments._
+
+  def createClientJson(query: String): JsValue = {
+    createSegmentation(query).toJson
+  }
 
   def createSegmentation(query: String) = {
     val tokens = tokenize(query)
@@ -24,7 +30,7 @@ object Engine {
   }
 
   implicit def Offset2ClientPosition(offset: OffsetPosition) = {
-    new ClientPosition(offset.line, offset.column, offset.offset)
+    new ClientPosition(offset.line - 1, offset.column - 1, offset.offset)
   }
 
   def segment(query: String, tokens: List[TokenMatch]): SegmentedQuery = {
