@@ -5,9 +5,8 @@ import org.scalatest.{Matchers, WordSpec}
 
 class ParserApiSpec extends WordSpec with Matchers with ScalatestRouteTest with ParserAPI {
   "return a greeting for GET requests to the root path" in {
-    Get("/parse?utterance=test") ~> parserRoutes ~> check {
+    Get("/parse?query=test") ~> parserRoutes ~> check {
       val response = responseAs[String]
-
       response shouldBe "test"
     }
 

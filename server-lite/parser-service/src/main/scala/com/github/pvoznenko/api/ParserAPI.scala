@@ -6,8 +6,8 @@ import ch.megard.akka.http.cors.CorsDirectives._
 trait ParserAPI extends {
   val parserRoutes = cors() {
     (path("parse") & get) {
-      parameters('utterance) { (utterance) => {
-        complete(utterance)
+      parameters('query) { (query) => {
+        complete(query)
       }
       }
     }
