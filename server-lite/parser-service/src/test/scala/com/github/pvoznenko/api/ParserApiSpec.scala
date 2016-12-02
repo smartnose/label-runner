@@ -8,8 +8,7 @@ class ParserApiSpec extends WordSpec with Matchers with ScalatestRouteTest with 
     Get("/parse?utterance=test") ~> parserRoutes ~> check {
       val response = responseAs[String]
 
-      response should not be ""
-      response.length should be(64)
+      response shouldBe "test"
     }
 
     // Post("/parse?utterance=" +

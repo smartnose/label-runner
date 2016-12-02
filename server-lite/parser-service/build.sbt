@@ -18,6 +18,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-http-experimental"               % akkaStreamVersion,
     "com.typesafe.akka" %% "akka-http-core-experimental"          % akkaStreamVersion,
     "com.typesafe.akka" %% "akka-http-testkit-experimental"       % akkaStreamVersion,
+    "ch.megard"         %% "akka-http-cors"                       % "0.1.10",
     "org.scalatest"     %% "scalatest"                            % "2.2.5" % "test",
     "com.typesafe.akka" %% "akka-testkit"                         % akkaVersion % "test"
   )
