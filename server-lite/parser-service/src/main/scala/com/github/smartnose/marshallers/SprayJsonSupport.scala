@@ -1,4 +1,4 @@
-package com.github.pvoznenko.marshallers
+package com.github.smartnose.marshallers
 
 import akka.http.scaladsl.marshalling._
 import akka.http.scaladsl.model.MediaTypes.`application/json`

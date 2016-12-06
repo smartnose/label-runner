@@ -1,8 +1,8 @@
-package com.github.pvoznenko.api
+package com.github.smartnose.api
 
 import akka.http.scaladsl.server.Directives._
 import ch.megard.akka.http.cors.CorsDirectives._
-import com.github.pvoznenko.marshallers.SprayJsonSupport._
+import com.github.smartnose.marshallers.SprayJsonSupport._
 import wws.labeling.engine.Engine
 
 trait ParserAPI extends {

@@ -1,4 +1,4 @@
-package com.github.pvoznenko.api
+package com.github.smartnose.api
 
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest.{Matchers, WordSpec}
@@ -7,7 +7,7 @@ import spray.json.JsValue
 
 class ParserApiSpec extends WordSpec with Matchers with ScalatestRouteTest with ParserAPI {
 
-  import com.github.pvoznenko.marshallers.SprayJsonSupport._
+  import com.github.smartnose.marshallers.SprayJsonSupport._
 
   "return a segmented query" in {
     Get("/parse?query=test") ~> parserRoutes ~> check {

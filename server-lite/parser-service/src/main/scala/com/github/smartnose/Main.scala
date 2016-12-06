@@ -1,10 +1,10 @@
-package com.github.pvoznenko
+package com.github.smartnose
 
 import akka.stream.ActorMaterializer
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
 import akka.http.scaladsl.Http
-import com.github.pvoznenko.utils.Config
+import com.github.smartnose.utils.Config
 import scala.concurrent.ExecutionContext
 import akka.http.scaladsl.server.Directives._
 

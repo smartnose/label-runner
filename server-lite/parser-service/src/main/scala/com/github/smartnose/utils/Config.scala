@@ -1,4 +1,4 @@
-package com.github.pvoznenko.utils
+package com.github.smartnose.utils
 
 import com.typesafe.config.ConfigFactory
 
