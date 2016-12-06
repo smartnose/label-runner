@@ -5,6 +5,14 @@
   <button type="submit">Add</button>
 </form>
 
+<form (submit)="parse()">
+  <input [(ngModel)]="query" name="query" placeholder="hello world">
+  <button type="submit">Parse</button>
+</form>
+
+<div>{{segmentedQuery}}</div>
+<div>{{temp}}</div>
+
 <ul>
   <li *ngFor="let name of names">{{name}}</li>
 </ul>
