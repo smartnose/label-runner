@@ -1,0 +1,18 @@
+<p>Howdy! Here's a list of awesome computer scientists. Do you know any others? Add to the list yourself.</p>
+
+<form (submit)="addName()">
+  <input [(ngModel)]="newName" name="newName" placeholder="Awesome Computer Scientist">
+  <button type="submit">Add</button>
+</form>
+
+<form (submit)="parse()">
+  <input [(ngModel)]="query" name="query" placeholder="hello world">
+  <button type="submit">Parse</button>
+</form>
+
+<div>{{segmentedQuery}}</div>
+<div>{{temp}}</div>
+
+<ul>
+  <li *ngFor="let name of names">{{name}}</li>
+</ul>

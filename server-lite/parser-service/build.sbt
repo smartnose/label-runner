@@ -10,7 +10,7 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
 libraryDependencies ++= {
   val akkaStreamVersion = "1.0-RC4"
-  val akkaVersion = "2.3.11"
+  val akkaVersion = "2.4.4"
 
   Seq(
     "com.typesafe.akka" %% "akka-actor"                           % akkaVersion,
@@ -18,6 +18,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-http-experimental"               % akkaStreamVersion,
     "com.typesafe.akka" %% "akka-http-core-experimental"          % akkaStreamVersion,
     "com.typesafe.akka" %% "akka-http-testkit-experimental"       % akkaStreamVersion,
+    "ch.megard"         %% "akka-http-cors"                       % "0.1.10",
     "org.scalatest"     %% "scalatest"                            % "2.2.5" % "test",
     "com.typesafe.akka" %% "akka-testkit"                         % akkaVersion % "test"
   )
@@ -31,4 +32,4 @@ val main = Project(id = "server-lite", base = file(".")).dependsOn(core)
 Revolver.settings
 
 
-fork in run := true
+fork in run := false
