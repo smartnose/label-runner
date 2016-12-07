@@ -2,9 +2,9 @@
  * Keep these data structure in sync to-the-letter with our scala backend.
  */
 export class Position {
-    row: Number;
-    col: Number;
-    offset: Number;
+    row: number;
+    col: number;
+    offset: number;
 }
 export enum SegmentKind {
     Token,

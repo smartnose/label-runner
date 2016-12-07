@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NameListService, ParserService, SegmentedQuery } from '../shared/index';
+import { NameListService, ParserService, SegmentedLine } from '../shared/index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   errorMessage: string;
   names: any[] = [];
   query: string = '';
-  segmentedQuery: SegmentedQuery;
+  segmentedLine: SegmentedLine;
   temp: string;
 
   /**
@@ -59,9 +59,9 @@ export class HomeComponent implements OnInit {
   parse() {
     this.parserService.get(this.query)
       .subscribe(
-        segmentedQuery => { 
-          this.segmentedQuery = segmentedQuery;
-          this.temp = JSON.stringify(segmentedQuery) 
+        segmentedLine => { 
+          this.segmentedLine = segmentedLine;
+          this.temp = JSON.stringify(segmentedLine) 
         },
         error =>this.errorMessage = <any>error
       )

@@ -7,3 +7,4 @@ export * from './navbar/index';
 export * from './toolbar/index';
 export * from './config/env.config';
 export * from './contract';
+export * from './models';

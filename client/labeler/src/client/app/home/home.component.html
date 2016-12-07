@@ -10,7 +10,10 @@
   <button type="submit">Parse</button>
 </form>
 
-<div>{{segmentedQuery}}</div>
+<div *ngIf="segmentedLine">
+  <div><span *ngFor="let seg of segmentedLine.segments">{{seg.text}}</span></div>
+</div>
+
 <div>{{temp}}</div>
 
 <ul>
