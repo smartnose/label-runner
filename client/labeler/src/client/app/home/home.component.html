@@ -6,7 +6,7 @@
 </form>
 
 <div *ngIf="segmentedLine">
-  <div><span *ngFor="let seg of segmentedLine.segments">{{seg.text}}</span></div>
+  <div><sd-segment *ngFor="let seg of segmentedLine.segments" [segment]="seg"></sd-segment></div>
 </div>
 
 <h2>JSON returned from server:<h2>
