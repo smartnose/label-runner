@@ -12,7 +12,7 @@ export class LineSegment {
  */
 export class SegmentedLine {
     segments: LineSegment[]
-    constructor(private segmentedQuery: SegmentedQuery) {
+    constructor(segmentedQuery: SegmentedQuery) {
         let query = segmentedQuery.query;
         this.segments = segmentedQuery.segmentation.segments.map(e => {
             return new LineSegment(query.substr(e.start.offset, e.end.offset - e.start.offset + 1), e.kind);

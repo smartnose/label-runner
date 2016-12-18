@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NameListService, ParserService, SegmentedLine } from '../shared/index';
+import { ParserService, SegmentedLine } from '../shared/index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -11,51 +11,26 @@ import { NameListService, ParserService, SegmentedLine } from '../shared/index';
   styleUrls: ['home.component.css'],
 })
 export class HomeComponent implements OnInit {
-
-  newName: string = '';
   errorMessage: string;
-  names: any[] = [];
   query: string = '';
   segmentedLine: SegmentedLine;
   temp: string;
 
   /**
-   * Creates an instance of the HomeComponent with the injected
+   * Creates an instance of the HomeService with the injected
    * NameListService.
    *
-   * @param {NameListService} nameListService - The injected NameListService.
+   * @param {ParserService} parserService - The injected ParserService.
    */
-  constructor(public nameListService: NameListService, public parserService: ParserService) {}
+  constructor(public parserService: ParserService) {}
 
   /**
-   * Get the names OnInit
+   * Initializes
    */
   ngOnInit() {
-    this.getNames();
+    
   }
-
-  /**
-   * Handle the nameListService observable
-   */
-  getNames() {
-    this.nameListService.get()
-      .subscribe(
-        names => this.names = names,
-        error => this.errorMessage = <any>error
-      );
-  }
-
-  /**
-   * Pushes a new name onto the names array
-   * @return {boolean} false to prevent default form submit behavior to refresh the page.
-   */
-  addName(): boolean {
-    // TODO: implement nameListService.post
-    this.names.push(this.newName);
-    this.newName = '';
-    return false;
-  }
-
+  
   parse() {
     this.parserService.get(this.query)
       .subscribe(
