@@ -1,5 +1,5 @@
 import { Component, AfterViewChecked, Input, ElementRef } from '@angular/core';
-import { SegmentedLine, LineSegment } from '../index';
+import { SegmentedQuery, Segment } from '../index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -11,13 +11,13 @@ import { SegmentedLine, LineSegment } from '../index';
 })
 export class SegmentComponent implements AfterViewChecked {
   @Input('segment')
-  segment: LineSegment
+  segment: Segment
 
   constructor(private el: ElementRef) {
   }
 
   /**
-   * Initializes
+   * Track the screen position of the segment element
    */
   ngAfterViewChecked() {
       let ele = this.el.nativeElement;

@@ -12,7 +12,7 @@ import {
 } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
-import { ParserService, SegmentedLine, SegmentedQuery, Segmentation, Segment } from '../shared/index';
+import { ParserService, CSegmentedQuery, SegmentedQuery, Segmentation, Segment } from '../shared/index';
 import { HomeModule } from './home.module';
 import { HomeComponent } from './index';
 
@@ -125,7 +125,7 @@ export function main() {
             expect(homeDOMEl.querySelectorAll('li').length).toEqual(0);
 
             homeInstance.query = "a b c"
-            homeInstance.segmentedLine = new SegmentedLine(segmentedQuery)
+            homeInstance.segmentedLine = new SegmentedQuery(segmentedQuery)
 
             fixture.detectChanges();
 

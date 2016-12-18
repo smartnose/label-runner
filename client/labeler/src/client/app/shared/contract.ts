@@ -1,5 +1,7 @@
 /**
  * Keep these data structure in sync to-the-letter with our scala backend.
+ * 'C' prefix here indicates its a contract class, to avoid client-side
+ * data structures of similar names.
  */
 export class Position {
     row: number;
@@ -10,15 +12,15 @@ export enum SegmentKind {
     Token,
     Separator
 }
-export class Segment {
+export class CSegment {
     start: Position;
     end: Position;
     kind: SegmentKind;
 }
 export class Segmentation {
-    segments: Segment[];
+    segments: CSegment[];
 }
-export class SegmentedQuery {
+export class CSegmentedQuery {
     query: String;
     segmentation: Segmentation
 }

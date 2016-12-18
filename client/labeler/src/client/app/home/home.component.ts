@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ParserService, SegmentedLine } from '../shared/index';
+import { ParserService, SegmentedQuery } from '../shared/index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -13,7 +13,7 @@ import { ParserService, SegmentedLine } from '../shared/index';
 export class HomeComponent implements OnInit {
   errorMessage: string;
   query: string = '';
-  segmentedLine: SegmentedLine;
+  segmentedLine: SegmentedQuery;
   temp: string;
 
   /**
