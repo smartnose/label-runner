@@ -20,11 +20,6 @@ export class SegmentComponent implements AfterViewChecked {
    * Track the screen position of the segment element
    */
   ngAfterViewChecked() {
-      let ele = this.el.nativeElement;
-      let seg = this.segment;
-      seg.offsetTop = ele.offsetTop;
-      seg.offsetLeft = ele.offsetLeft;
-      seg.offsetWidth = ele.offsetWidth;
-      seg.offsetHeight = ele.offsetHeight;
+      this.segment.element = this.el
   }
 }

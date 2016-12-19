@@ -1,0 +1,80 @@
+.box {
+  color: #fe33ac;
+  border-color: #fdcdea;
+}
+.box div {
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.label {
+  position: absolute;
+  z-index: 1090;
+  display: block;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-break: auto;
+  line-height: 1.42857143;
+  text-align: left;
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  white-space: normal;
+  word-break: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  font-size: 12px;
+}
+.label.top {
+  margin-top: -3px;
+  padding: 5px 0;
+}
+.label.right {
+  margin-left: 3px;
+  padding: 0 5px;
+}
+.label.bottom {
+  margin-top: 3px;
+  padding: 5px 0;
+}
+.label.left {
+  margin-left: -3px;
+  padding: 0 5px;
+}
+.label-inner {
+  max-width: 200px;
+  padding: 3px 8px;
+  color: #fff;
+  text-align: center;
+  background-color: #000;
+  border-radius: 4px;
+}
+.label-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.label.top .label-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #000;
+}
+.label.adorner {
+  z-index: 1091;
+  opacity: 0.9;
+  border-top-color: black;
+  border-top: 2px solid black;
+}
+.label.adorner.selected {
+  border: 2px solid blue;
+}
+.label.adorner.shadow {
+  opacity: 0.1;
+  background-color: black;
+}

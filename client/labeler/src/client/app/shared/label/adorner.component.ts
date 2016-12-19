@@ -17,7 +17,8 @@ import { Segment, LabelSection} from '../models';
     [ngClass]="{selected:labelSection.isSelected}"
     [ngStyle]="{top: top, left: left, width: width, height: height, display: display}">
   </div>`,
-  providers: [PositionService]
+  providers: [PositionService],
+  styleUrls: ['adorner.component.css']
 })
 export class AdornerComponent implements AfterViewChecked {
     left: string;

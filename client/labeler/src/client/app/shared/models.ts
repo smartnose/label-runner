@@ -17,14 +17,6 @@ export class Segment {
     constructor(public text: string, public kind: SegmentKind) {
     }
 
-    /**
-     * Offset of the DOM element representing this line segment in its parent.
-     */
-    public offsetLeft: number;
-    public offsetTop: number;
-    public offsetWidth: number;
-    public offsetHeight: number;
-
     public element: ElementRef;
 }
 

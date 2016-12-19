@@ -7,6 +7,8 @@ import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 import { ParserService } from './parser/index';
 import { SegmentComponent } from './segment/segment.component';
+import { LabelComponent } from './label/label.component';
+import { AdornerComponent } from './label/adorner.component';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -14,8 +16,9 @@ import { SegmentComponent } from './segment/segment.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [ToolbarComponent, NavbarComponent, SegmentComponent],
-  exports: [ToolbarComponent, NavbarComponent, SegmentComponent,
+  declarations: [ToolbarComponent, NavbarComponent, SegmentComponent, LabelComponent, AdornerComponent],
+  exports: [ToolbarComponent, NavbarComponent, 
+    SegmentComponent, LabelComponent, AdornerComponent,
     CommonModule, FormsModule, RouterModule]
 })
 export class SharedModule {
