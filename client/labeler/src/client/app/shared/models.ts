@@ -1,3 +1,4 @@
+import { ElementRef } from '@angular/core'
 import {CSegmentedQuery, SegmentKind} from './contract'
 import { Subject } from 'rxjs/Subject';
 
@@ -23,6 +24,8 @@ export class Segment {
     public offsetTop: number;
     public offsetWidth: number;
     public offsetHeight: number;
+
+    public element: ElementRef;
 }
 
 /**

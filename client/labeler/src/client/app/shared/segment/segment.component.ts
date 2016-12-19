@@ -26,6 +26,5 @@ export class SegmentComponent implements AfterViewChecked {
       seg.offsetLeft = ele.offsetLeft;
       seg.offsetWidth = ele.offsetWidth;
       seg.offsetHeight = ele.offsetHeight;
-      console.log(seg);
   }
 }
