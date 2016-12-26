@@ -7,3 +7,5 @@ export * from './toolbar/index';
 export * from './config/env.config';
 export * from './contract';
 export * from './models';
+export * from './label/label.component';
+export * from './label/adorner.component';

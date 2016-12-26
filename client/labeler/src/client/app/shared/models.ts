@@ -47,6 +47,16 @@ export class LabelSection {
     endIndexChanged: Subject<number>;
     segments: Segment[];
 
+    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery) {
+        this.start = start;
+        this.end = end;
+        this.label = label;
+        this.startIndexChanged = new Subject<number>();
+        this.endIndexChanged = new Subject<number>();
+        this.segmentedQuery = segmentedQuery;
+        this.updateSegments();
+    }
+
     private segmentedQuery: SegmentedQuery
 
     /**
@@ -112,6 +122,6 @@ export class LabelSection {
     }
     private updateSegments() {
         var segs = this.segmentedQuery.segments;
-        this.segments = segs.slice(this.start, this.end + 1).map(seg => <Segment>seg);
+        this.segments = segs.slice(this.start, this.end + 1);
     }
 }

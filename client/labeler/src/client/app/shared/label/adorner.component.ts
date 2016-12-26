@@ -31,7 +31,6 @@ export class AdornerComponent implements AfterViewChecked {
     private _boundingBox: BoundingBox;
     private segments: Segment[];
     constructor(public element:ElementRef,
-        private _annotationService:AnnotationService,
         private _positionService:PositionService,
         private _changeDetectionRef : ChangeDetectorRef) {
         this.display = 'block';
@@ -40,9 +39,6 @@ export class AdornerComponent implements AfterViewChecked {
         this.content = 'hello world';
         console.log(element);
         var self = this;
-        this._annotationService.selectedSection.subscribe((newSection) => {
-           console.log(self.labelSection.isSelected);
-        });
     }
     ngAfterViewChecked() {
         if(this._boundingBox !== null) {
@@ -65,7 +61,7 @@ export class AdornerComponent implements AfterViewChecked {
         });
     }
     clicked() {
-        this._annotationService.SelectLabel(this.labelSection);
+        //this._annotationService.SelectLabel(this.labelSection);
     }
     private updatePosition() {
         var labelSection = this.labelSection;
