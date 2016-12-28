@@ -24,6 +24,17 @@ export class ChunkComponent implements OnChanges {
     ngOnChanges() {
         console.log('data changes in sd-chunk');
         let boundingBox = this.chunk.boundingBox;
+        if(!boundingBox) {
+            boundingBox = {
+                top : 0,
+                left: 0,
+                width: 50,
+                height: 50
+            }
+        }
+
+        console.log('bounding box before convertion');
+        console.log(boundingBox)
         let relativeBox = this.positionService.convertDirectOffsetToRelative(boundingBox, this._nativeElement);
         this.adornerPosition = new AbsolutePosition(relativeBox);
         this.labelPosition = new AbsolutePosition(relativeBox);

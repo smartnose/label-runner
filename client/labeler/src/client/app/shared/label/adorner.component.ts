@@ -9,12 +9,12 @@ import { Segment, LabelSection} from '../models';
   template: `
   <div class="label adorner"
     (click)="clicked();"
-    [ngClass]="{selected:labelSection.isSelected}"
+    [ngClass]="{selected:isSelected}"
     [ngStyle]="{top: position.top, left: position.left, width: position.width, height: position.height, display: display}">
   </div>
   <div class="label adorner shadow" 
     (click)="clicked();" 
-    [ngClass]="{selected:labelSection.isSelected}"
+    [ngClass]="{selected:isSelected}"
     [ngStyle]="{top: position.top, left: position.left, width: position.width, height: position.height, display: display}">
   </div>`,
   providers: [ PositionService ],
@@ -23,6 +23,7 @@ import { Segment, LabelSection} from '../models';
 export class AdornerComponent {
     @Input() content: string;
     display: string;
+    isSelected: boolean = false;
     @Input() labelSection: LabelSection;
     @Input() position: AbsolutePosition;
     constructor(public element:ElementRef) {

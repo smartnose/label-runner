@@ -1,4 +1,4 @@
-import { Component, ElementRef, ChangeDetectorRef, NgZone, Input } from '@angular/core';
+import { Component, ElementRef, ChangeDetectorRef, NgZone, Input, OnChanges } from '@angular/core';
 import { PositionService, BoundingBox, AbsolutePosition } from '../position/position.service';
 import { Segment, LabelSection } from '../models';
 
@@ -14,7 +14,7 @@ import { Segment, LabelSection } from '../models';
   providers: [PositionService],
   styleUrls: ['adorner.component.css']
 })
-export class LabelComponent {
+export class LabelComponent implements OnChanges {
     @Input() position: AbsolutePosition
     content: string;
     display: string;
@@ -30,5 +30,9 @@ export class LabelComponent {
         this.content = 'hello world';
         console.log(element);
         let self = this;
+    }
+
+    ngOnChanges() {
+        console.log(this.position);
     }
 }

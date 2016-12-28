@@ -57,7 +57,9 @@ export class HomeComponent implements OnInit, AfterViewChecked {
     
   }
   ngAfterViewChecked() {
-    
+    if(this.labelSections) {
+      this.labelSections.forEach(l => l.updateBoundingBox(this._positionService))
+    }
   }
   
   parse() {
@@ -67,7 +69,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
           this.segmentedLine = segmentedLine;
           this.temp = JSON.stringify(segmentedLine);
           this.labelSections = [];
-          this.labelSections.push(new LabelSection(0, 0, "label", this.segmentedLine, this._positionService));
+          this.labelSections.push(new LabelSection(0, 0, "label", this.segmentedLine));
         },
         error =>this.errorMessage = <any>error
       )

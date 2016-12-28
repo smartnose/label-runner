@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 import { ParserService } from './parser/index';
+import { PositionService } from './position/position.service';
 import { SegmentComponent } from './segment/segment.component';
 import { LabelComponent } from './label/label.component';
 import { AdornerComponent } from './label/adorner.component';
@@ -27,7 +28,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [ParserService]
+      providers: [ ParserService, PositionService ]
     };
   }
 }

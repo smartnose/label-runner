@@ -49,7 +49,7 @@ export class LabelSection {
     segments: Segment[];
     boundingBox: BoundingBox;
 
-    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery, positionService: PositionService) {
+    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery) {
         this.start = start;
         this.end = end;
         this.label = label;
@@ -57,10 +57,14 @@ export class LabelSection {
         this.endIndexChanged = new Subject<number>();
         this.segmentedQuery = segmentedQuery;
         this.updateSegments();
-        this.boundingBox = positionService.boundingBox(this.segments);
+        // this.boundingBox = positionService.boundingBox(this.segments);
     }
 
     private segmentedQuery: SegmentedQuery
+
+    public updateBoundingBox(positionService: PositionService) {
+        this.boundingBox = positionService.boundingBox(this.segments.map(e => e.element.nativeElement));
+    }
 
     /**
      * Try updating the start index of a label pattern.

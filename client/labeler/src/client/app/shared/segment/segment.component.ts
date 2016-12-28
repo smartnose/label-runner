@@ -20,6 +20,7 @@ export class SegmentComponent implements AfterViewInit {
    * Track the screen position of the segment element
    */
   ngAfterViewInit() {
+      console.log('wiring up the segment element')
       this.segment.element = this.el
   }
 }
