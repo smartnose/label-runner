@@ -20,6 +20,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SegmentComponent } from './shared/segment/segment.component';
 import { LabelComponent } from './shared/label/label.component'
 import { AdornerComponent } from './shared/label/adorner.component'
+import { ChunkComponent } from './shared/label/chunk.component';
 
 export function main() {
 
@@ -34,7 +35,7 @@ export function main() {
         imports: [FormsModule, RouterTestingModule.withRoutes(config)],
         declarations: [TestComponent, ToolbarComponent,
           NavbarComponent, AppComponent,
-          LabelComponent, AdornerComponent,
+          LabelComponent, AdornerComponent, ChunkComponent,
           HomeComponent, AboutComponent, SegmentComponent],
         providers: [
           { provide: APP_BASE_HREF, useValue: '/' }

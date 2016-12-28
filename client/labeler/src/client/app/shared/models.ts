@@ -1,5 +1,6 @@
-import { ElementRef } from '@angular/core'
-import {CSegmentedQuery, SegmentKind} from './contract'
+import { ElementRef } from '@angular/core';
+import { CSegmentedQuery, SegmentKind } from './contract';
+import { AbsolutePosition, PositionService, BoundingBox } from './position/position.service';
 import { Subject } from 'rxjs/Subject';
 
 /**
@@ -46,8 +47,9 @@ export class LabelSection {
     startIndexChanged: Subject<number>;
     endIndexChanged: Subject<number>;
     segments: Segment[];
+    boundingBox: BoundingBox;
 
-    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery) {
+    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery, positionService: PositionService) {
         this.start = start;
         this.end = end;
         this.label = label;
@@ -55,6 +57,7 @@ export class LabelSection {
         this.endIndexChanged = new Subject<number>();
         this.segmentedQuery = segmentedQuery;
         this.updateSegments();
+        this.boundingBox = positionService.boundingBox(this.segments);
     }
 
     private segmentedQuery: SegmentedQuery

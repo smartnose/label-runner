@@ -1,4 +1,4 @@
-import { Component, AfterViewChecked, Input, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Input, ElementRef } from '@angular/core';
 import { SegmentedQuery, Segment } from '../index';
 
 /**
@@ -9,7 +9,7 @@ import { SegmentedQuery, Segment } from '../index';
   selector: 'sd-segment',
   template: '<span>{{segment.text}}</span>',
 })
-export class SegmentComponent implements AfterViewChecked {
+export class SegmentComponent implements AfterViewInit {
   @Input('segment')
   segment: Segment
 
@@ -19,7 +19,7 @@ export class SegmentComponent implements AfterViewChecked {
   /**
    * Track the screen position of the segment element
    */
-  ngAfterViewChecked() {
+  ngAfterViewInit() {
       this.segment.element = this.el
   }
 }

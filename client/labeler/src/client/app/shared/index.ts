@@ -9,3 +9,4 @@ export * from './contract';
 export * from './models';
 export * from './label/label.component';
 export * from './label/adorner.component';
+export * from './position/position.service';

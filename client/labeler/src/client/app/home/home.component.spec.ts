@@ -12,7 +12,7 @@ import {
 } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
-import { ParserService, CSegmentedQuery, SegmentedQuery, Segmentation, Segment } from '../shared/index';
+import { ParserService, PositionService, CSegmentedQuery, SegmentedQuery, Segmentation, Segment } from '../shared/index';
 import {SharedModule} from '../shared/shared.module'
 import { HomeModule } from './home.module';
 import { HomeComponent } from './index';
@@ -100,6 +100,7 @@ export function main() {
         declarations: [TestComponent],
         providers: [
           ParserService,
+          PositionService,
           BaseRequestOptions,
           MockBackend,
           {provide: Http, useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions) {

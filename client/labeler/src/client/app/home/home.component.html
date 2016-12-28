@@ -8,6 +8,9 @@
 <div *ngIf="segmentedLine">
   <div><sd-segment *ngFor="let seg of segmentedLine.segments" [segment]="seg"></sd-segment></div>
 </div>
+<div *ngIf="labelSections">
+  <sd-chunk *ngFor="let chunk of labelSections" [chunk]="chunk"></sd-chunk>
+</div>
 
 <h2>JSON returned from server:<h2>
 <div>{{temp}}</div>

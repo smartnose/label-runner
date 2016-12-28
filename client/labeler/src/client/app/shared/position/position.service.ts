@@ -1,5 +1,5 @@
 import {
-    Injectable
+    Injectable,
 } from '@angular/core';
 
 export class BoundingBox {
@@ -9,11 +9,23 @@ export class BoundingBox {
     left: number;
 }
 
-export class Position {
-    left: number;
-    top: number;
+export class AbsolutePosition {
+  width: string;
+  height: string;
+  top: string;
+  left: string;
+  constructor(box: BoundingBox) {
+    this.width = box.width + 'px';
+    this.height = box.height + 'px';
+    this.top = box.top + 'px';
+    this.left = box.left + 'px';
+  }
 }
 
+/**
+ * TODO - should really just be a util class.
+ * No need to overengineer it into a serivce.
+ */
 @Injectable()
 export class PositionService {
 
@@ -72,17 +84,24 @@ export class PositionService {
   }
 
   /**
-   * Provides coordinates for the targetEl in relation to a bounding-box
+   * We can extract the bounding box of an element relative to the view port
+   * When we set its position, the position is relative to its 'positioned'
+   * parent. Here we convert the former to the later.
    */
-  public poisitionElementToBoundingBox(boundingBox: BoundingBox, targetEl:any):Position {
-    let targetElWidth = targetEl.offsetWidth;
-    let targetElHeight = targetEl.offsetHeight;
-    let targetElPos:{top: number, left: number};
-    targetElPos = {
-        top: boundingBox.top - targetElHeight,
-        left: boundingBox.left + boundingBox.width / 2 - targetElWidth / 2
+  public convertDirectOffsetToRelative(boundingBox: BoundingBox, positionedParent:any):BoundingBox {
+    let converted: BoundingBox;
+
+    let offsetParentBCR = {top: 0, left: 0};
+    offsetParentBCR = this.offset(positionedParent);
+
+    converted = {
+        top: boundingBox.top - positionedParent.top,
+        left: boundingBox.left - positionedParent.left,
+        width: boundingBox.width,
+        height: boundingBox.height
     };
-    return targetElPos;
+
+    return converted;
   }
   private get window():any {
     return window;

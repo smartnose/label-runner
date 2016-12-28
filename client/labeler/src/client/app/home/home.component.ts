@@ -9,7 +9,7 @@ import {
   NgZone,
   ViewContainerRef 
 } from '@angular/core';
-import { ParserService, SegmentedQuery, LabelSection, LabelComponent, AdornerComponent } from '../shared/index';
+import { ParserService, PositionService, SegmentedQuery, LabelSection, LabelComponent, AdornerComponent } from '../shared/index';
 
 
 /**
@@ -44,20 +44,10 @@ export class HomeComponent implements OnInit, AfterViewChecked {
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _injector: Injector,
               private _ngZone: NgZone,
+              private _positionService: PositionService,
               public parserService: ParserService) {
                   this._labelComponentFactory = _componentFactoryResolver.resolveComponentFactory<LabelComponent>(LabelComponent);
                   this._adonerComponentFacotry = _componentFactoryResolver.resolveComponentFactory<AdornerComponent>(AdornerComponent);
-                  this._ngZone.onStable.subscribe(() => {
-                    console.log('ngZone fired');
-                  if(!this.labelComponents && this.labelSections) {
-                        this.labelComponents = [];
-                        this.adornerComponents = [];
-                        for(var i = 0; i < this.labelSections.length; i++) {
-                            var labelSection = this.labelSections[i];
-                            this.createChildComponents(labelSection);
-                        }
-                    }
-                  });
               }
 
   /**
@@ -77,16 +67,9 @@ export class HomeComponent implements OnInit, AfterViewChecked {
           this.segmentedLine = segmentedLine;
           this.temp = JSON.stringify(segmentedLine);
           this.labelSections = [];
-          this.labelSections.push(new LabelSection(0, 0, "label", this.segmentedLine));
+          this.labelSections.push(new LabelSection(0, 0, "label", this.segmentedLine, this._positionService));
         },
         error =>this.errorMessage = <any>error
       )
-  }
-
-  private createChildComponents(labelSection: LabelSection) {
-      let label = this._viewContainerRef.createComponent(this._labelComponentFactory, this.childIndex ++, this._injector);
-      label.instance.position(labelSection);
-      let adorner = this._viewContainerRef.createComponent(this._adonerComponentFacotry, this.childIndex ++, this._injector);
-      adorner.instance.position(labelSection);
   }
 }
