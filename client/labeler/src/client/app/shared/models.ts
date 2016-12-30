@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { CSegmentedQuery, SegmentKind } from './contract';
 import { AbsolutePosition, PositionService, BoundingBox } from './position/position.service';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject, Subject, Subscription, Observable } from 'rxjs/Rx'
 
 /**
  * Client models containing various client-specific state data.
@@ -16,9 +16,10 @@ import { Subject } from 'rxjs/Subject';
  */
 export class Segment {
     constructor(public text: string, public kind: SegmentKind) {
+        this.elementRef = new BehaviorSubject<ElementRef>(null);
     }
 
-    public element: ElementRef;
+    public elementRef: BehaviorSubject<ElementRef>;
 }
 
 /**
@@ -39,17 +40,21 @@ export class SegmentedQuery {
 /**
  * A continuous sequence of line segments sharing same label
  */
-export class LabelSection {
+export class Chunk {
     start: number;
     end: number;
     label: string;
     isSelected: boolean;
     startIndexChanged: Subject<number>;
     endIndexChanged: Subject<number>;
-    segments: Segment[];
+    
     boundingBox: BoundingBox;
+    boundingBoxChanged: Subject<BoundingBox> = new Subject<BoundingBox>();
 
-    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery) {
+    private segmentChanged: Observable<ElementRef>;
+    private segmentChangedSubscription: Subscription;
+
+    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery, private positionService: PositionService) {
         this.start = start;
         this.end = end;
         this.label = label;
@@ -62,15 +67,20 @@ export class LabelSection {
 
     private segmentedQuery: SegmentedQuery
 
-    public updateBoundingBox(positionService: PositionService) {
-        this.boundingBox = positionService.boundingBox(this.segments.map(e => e.element.nativeElement));
+    private tryUpdateBoundingBox(segments: Segment[]): boolean {
+        if(segments.filter(e => e.elementRef.getValue() == null).length > 0)
+            return false;
+        let newBoundingBox = this.positionService.boundingBox(segments.map(e => e.elementRef.getValue().nativeElement));
+        this.boundingBoxChanged.next(newBoundingBox);
+        this.boundingBox = newBoundingBox;
+        return true;
     }
 
     /**
      * Try updating the start index of a label pattern.
      * The changed label pattern should not violate the constraint that no label patterns should overlap. 
      */
-    public tryExpandLeft(neighoringPatterns: LabelSection[]): void {
+    public tryExpandLeft(neighoringPatterns: Chunk[]): void {
         var newStart = this.findAlphaNumericSegmentOnTheLeft(this.start);
         if(newStart < 0 || this.containedInNeighoringPatterns(newStart, neighoringPatterns)) {
             return;
@@ -79,7 +89,7 @@ export class LabelSection {
         this.updateSegments();
         this.startIndexChanged.next(newStart);
     }
-    public tryShrinkLeft(neighoringPatterns: LabelSection[]): void {
+    public tryShrinkLeft(neighoringPatterns: Chunk[]): void {
         var newStart = this.findAlphaNumericSegmentOnTheRight(this.start);
         if(newStart < 0 || newStart > this.end || this.containedInNeighoringPatterns(newStart, neighoringPatterns)) {
             return;
@@ -88,7 +98,7 @@ export class LabelSection {
         this.updateSegments();
         this.startIndexChanged.next(newStart);
     }
-    public tryExpandRight(neighoringPatterns: LabelSection[]): void {
+    public tryExpandRight(neighoringPatterns: Chunk[]): void {
         var newEnd = this.findAlphaNumericSegmentOnTheRight(this.end);
         if(newEnd < 0 || newEnd >= this.segmentedQuery.segments.length || this.containedInNeighoringPatterns(newEnd, neighoringPatterns)) {
             return;
@@ -97,7 +107,7 @@ export class LabelSection {
         this.updateSegments();
         this.endIndexChanged.next(newEnd);
     }
-    public tryShrinkRight(neighoringPatterns: LabelSection[]): void {
+    public tryShrinkRight(neighoringPatterns: Chunk[]): void {
         var newEnd = this.findAlphaNumericSegmentOnTheLeft(this.end);
         if(newEnd < 0 || newEnd < this.start || this.containedInNeighoringPatterns(newEnd, neighoringPatterns)) {
             return;
@@ -106,7 +116,7 @@ export class LabelSection {
         this.updateSegments();
         this.endIndexChanged.next(newEnd);
     }
-    private containedInNeighoringPatterns(position: number, neighoringPatterns: LabelSection[]): boolean {
+    private containedInNeighoringPatterns(position: number, neighoringPatterns: Chunk[]): boolean {
         return neighoringPatterns.findIndex((pattern) => pattern !== this && pattern.start <= position && pattern.end >= position) >= 0;
     }
     private findAlphaNumericSegmentOnTheLeft(position: number): number {
@@ -129,6 +139,19 @@ export class LabelSection {
     }
     private updateSegments() {
         var segs = this.segmentedQuery.segments;
-        this.segments = segs.slice(this.start, this.end + 1);
+
+        let segments = segs.slice(this.start, this.end + 1);
+
+        if(this.segmentChangedSubscription) 
+            this.segmentChangedSubscription.unsubscribe();
+
+        let subjects = segments.map(e => e.elementRef);
+        this.segmentChanged = Observable.merge(...subjects);
+        this.segmentChangedSubscription = this.segmentChanged.subscribe(() => {
+            console.log('try update bounding box')
+            this.tryUpdateBoundingBox(segments);
+        })
     }
+
+  
 }

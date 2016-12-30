@@ -21,6 +21,6 @@ export class SegmentComponent implements AfterViewInit {
    */
   ngAfterViewInit() {
       console.log('wiring up the segment element')
-      this.segment.element = this.el
+      this.segment.elementRef.next(this.el);
   }
 }

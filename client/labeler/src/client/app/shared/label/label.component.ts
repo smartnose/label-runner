@@ -1,6 +1,6 @@
 import { Component, ElementRef, ChangeDetectorRef, NgZone, Input, OnChanges } from '@angular/core';
 import { PositionService, BoundingBox, AbsolutePosition } from '../position/position.service';
-import { Segment, LabelSection } from '../models';
+import { Segment, Chunk } from '../models';
 
 @Component({
   selector: 'sd-label',
@@ -19,7 +19,7 @@ export class LabelComponent implements OnChanges {
     content: string;
     display: string;
     private _boundingBox: BoundingBox;
-    private _labelSection: LabelSection;
+    private _labelSection: Chunk;
     private segments: Segment[];
 
     constructor(public element:ElementRef, 

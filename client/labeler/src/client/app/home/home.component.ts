@@ -9,7 +9,7 @@ import {
   NgZone,
   ViewContainerRef 
 } from '@angular/core';
-import { ParserService, PositionService, SegmentedQuery, LabelSection, LabelComponent, AdornerComponent } from '../shared/index';
+import { ParserService, PositionService, SegmentedQuery, Chunk, LabelComponent, AdornerComponent } from '../shared/index';
 
 
 /**
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
   private childIndex: number;
   private labelComponents:Promise<ComponentRef<any>>[];
   private adornerComponents:Promise<ComponentRef<any>>[];
-  private labelSections: LabelSection[];
+  private labelSections: Chunk[];
   private _labelComponentFactory: ComponentFactory<LabelComponent>;
   private _adonerComponentFacotry: ComponentFactory<AdornerComponent>;
 
@@ -57,9 +57,6 @@ export class HomeComponent implements OnInit, AfterViewChecked {
     
   }
   ngAfterViewChecked() {
-    if(this.labelSections) {
-      this.labelSections.forEach(l => l.updateBoundingBox(this._positionService))
-    }
   }
   
   parse() {
@@ -69,7 +66,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
           this.segmentedLine = segmentedLine;
           this.temp = JSON.stringify(segmentedLine);
           this.labelSections = [];
-          this.labelSections.push(new LabelSection(0, 0, "label", this.segmentedLine));
+          this.labelSections.push(new Chunk(0, 0, "label", this.segmentedLine, this._positionService));
         },
         error =>this.errorMessage = <any>error
       )

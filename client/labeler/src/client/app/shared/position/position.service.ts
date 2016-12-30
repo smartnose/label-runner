@@ -95,8 +95,8 @@ export class PositionService {
     offsetParentBCR = this.offset(positionedParent);
 
     converted = {
-        top: boundingBox.top - positionedParent.top,
-        left: boundingBox.left - positionedParent.left,
+        top: boundingBox.top - offsetParentBCR.top,
+        left: boundingBox.left - offsetParentBCR.left,
         width: boundingBox.width,
         height: boundingBox.height
     };

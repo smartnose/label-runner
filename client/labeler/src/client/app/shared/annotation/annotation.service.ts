@@ -1,7 +1,7 @@
 import {
     Injectable
 } from '@angular/core';
-import {LabelSection} from '../models';
+import {Chunk} from '../models';
 import { Subject } from 'rxjs/Subject';
 
 /**
@@ -10,11 +10,11 @@ import { Subject } from 'rxjs/Subject';
  */
 @Injectable()
 export class AnnotationService {
-    selectedSection: Subject<LabelSection>;
-    private _selectedSection: LabelSection;
-    private _sections: LabelSection[];
+    selectedSection: Subject<Chunk>;
+    private _selectedSection: Chunk;
+    private _sections: Chunk[];
     constructor() {
-        this.selectedSection = new Subject();
+        this.selectedSection = new Subject<Chunk>();
         var self = this;
         this.selectedSection.subscribe((newPattern) => {
             if(self._selectedSection !== undefined) {
@@ -29,10 +29,10 @@ export class AnnotationService {
      * The label patterns should be refactored into the service
      * rather than passed in here. 
      */
-    public setPatterns(patterns: LabelSection[]): void {
+    public setPatterns(patterns: Chunk[]): void {
         this._sections = patterns;
     }
-    public SelectLabel(labelSection: LabelSection): void {
+    public SelectLabel(labelSection: Chunk): void {
         console.log('selected label pattern:' + labelSection);
         this.selectedSection.next(labelSection);
         return;

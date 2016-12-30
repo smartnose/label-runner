@@ -1,7 +1,7 @@
 import { Component, ElementRef, AfterViewChecked, ChangeDetectorRef, Input } from '@angular/core';
 import { PositionService, AbsolutePosition} from '../position/position.service';
 import { AnnotationService} from '../annotation/annotation.service';
-import { Segment, LabelSection} from '../models';
+import { Segment, Chunk} from '../models';
 
 @Component({
   selector: 'sd-adorner',
@@ -24,7 +24,7 @@ export class AdornerComponent {
     @Input() content: string;
     display: string;
     isSelected: boolean = false;
-    @Input() labelSection: LabelSection;
+    @Input() labelSection: Chunk;
     @Input() position: AbsolutePosition;
     constructor(public element:ElementRef) {
         this.display = 'block';
