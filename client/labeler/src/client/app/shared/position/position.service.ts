@@ -1,21 +1,25 @@
 import {
     Injectable,
+    ElementRef
 } from '@angular/core';
 
-export class BoundingBox {
+/**
+ * Offset of an HTML element.
+ */
+class Offset {
     width: number;
     height: number;
     top: number;
     left: number;
-    relativeToView: boolean;
+    offsetParentEl: any;
 }
 
-export class AbsolutePosition {
+export class OffsetText {
   width: string;
   height: string;
   top: string;
   left: string;
-  constructor(box: BoundingBox) {
+  constructor(box: Offset) {
     this.width = box.width + 'px';
     this.height = box.height + 'px';
     this.top = box.top + 'px';
@@ -31,10 +35,13 @@ export class AbsolutePosition {
 export class PositionService {
 
   /**
-   * Gets the bounding box of a group of nativeElements
+   * Gets the bounding box of a group of nativeElements.
+   * These elements must have the same offset parent.
    */
-  public boundingBox(nativeElements: any[]):BoundingBox {
+  public boundingBox(nativeElements: any[]):Offset {
      var positions = nativeElements.map(item => this.offset(item));
+     this.assertSameParent(positions);
+
      var right = Math.max(...positions.map(p => p.left + p.width));
      var bottom = Math.max(...positions.map(p => p.top + p.height));
      var top = Math.min(...positions.map(p => p.top));
@@ -44,15 +51,27 @@ export class PositionService {
          height : bottom - top,
          top: top,
          left: left,
-         relativeToView: true
+         offsetParentEl: positions[0].offsetParentEl
      };
+  }
+
+/**
+ * Assert that the offsets are computed against the same offset parent
+ */
+  private assertSameParent(boundingBoxes: Offset[]) {
+    let parents = new Set();
+    boundingBoxes.forEach((b) => {
+      parents.add(b);
+      if(parents.size > 1)
+        throw "the offset must be computed againsted the same offset parent";
+    })
   }
 
   /**
    * Provides read-only equivalent of jQuery's position function:
    * http://api.jquery.com/position/
    */
-  public position(nativeEl:any):BoundingBox {
+  public position(nativeEl:any):Offset {
     let elBCR = this.offset(nativeEl);
     let offsetParentBCR = {top: 0, left: 0};
     let offsetParentEl = this.parentOffsetEl(nativeEl);
@@ -68,7 +87,7 @@ export class PositionService {
       height: boundingClientRect.height || nativeEl.offsetHeight,
       top: elBCR.top - offsetParentBCR.top,
       left: elBCR.left - offsetParentBCR.left,
-      relativeToView: false
+      offsetParentEl: offsetParentEl
     };
   }
 
@@ -76,14 +95,14 @@ export class PositionService {
    * Provides read-only equivalent of jQuery's offset function:
    * http://api.jquery.com/offset/
    */
-  public offset(nativeEl:any):BoundingBox {
+  public offset(nativeEl:any):Offset {
     let boundingClientRect = nativeEl.getBoundingClientRect();
     return {
       width: boundingClientRect.width || nativeEl.offsetWidth,
       height: boundingClientRect.height || nativeEl.offsetHeight,
       top: boundingClientRect.top + (this.window.pageYOffset || this.document.documentElement.scrollTop),
       left: boundingClientRect.left + (this.window.pageXOffset || this.document.documentElement.scrollLeft),
-      relativeToView: true
+      offsetParentEl: this.window
     };
   }
 
@@ -94,37 +113,41 @@ export class PositionService {
    * When we set its position, the position is relative to its 'positioned'
    * parent. Here we convert the former to the later.
    */
-  public shiftToParent(boundingBox: BoundingBox, targetEl:any):BoundingBox {
-    if(!boundingBox.relativeToView) {
+  public shiftToParent(boundingBox: Offset, targetEl:any):OffsetText {
+    if(boundingBox.offsetParentEl !== this.window) {
         throw "the bounding box is already relative to parent. No need to conert"
     }
 
-    let converted: BoundingBox;
+    let shifted: Offset;
     let offsetParentBCR = {top: 0, left: 0};
-    let positionedParent = this.parentOffsetEl(targetEl)
-    offsetParentBCR = this.offset(positionedParent);
+    let offsetParentEl = this.parentOffsetEl(targetEl)
+    offsetParentBCR = this.offset(offsetParentEl);
 
-    converted = {
+    shifted = {
         top: boundingBox.top - offsetParentBCR.top,
         left: boundingBox.left - offsetParentBCR.left,
         width: boundingBox.width,
         height: boundingBox.height,
-        relativeToView: false
+        offsetParentEl: offsetParentEl
     };
 
-    return converted;
+    return new OffsetText(shifted);
   }
 
   /**
    * Shift the source bounding box so it sits on top of the target box
    */
-  public alignOnTop(source: BoundingBox, target: BoundingBox): BoundingBox {
+  public alignOnTop(source: Offset, target: Offset): Offset {
+    if(source.offsetParentEl !== target.offsetParentEl) {
+        throw "the source and taget must have the same offset parent";
+    }
+
     return {
         top: target.top - source.height,
         left: target.left - (source.width - target.width)/2,
         width: source.width,
         height: source.height,
-        relativeToView: source.relativeToView
+        offsetParentEl: source.offsetParentEl
     }
   }
 

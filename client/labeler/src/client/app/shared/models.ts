@@ -1,6 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { CSegmentedQuery, SegmentKind } from './contract';
-import { AbsolutePosition, PositionService, BoundingBox } from './position/position.service';
+import { OffsetText, PositionService, Offset } from './position/position.service';
 import { BehaviorSubject, Subject, Subscription, Observable } from 'rxjs/Rx'
 
 /**
@@ -48,8 +48,8 @@ export class Chunk {
     startIndexChanged: Subject<number>;
     endIndexChanged: Subject<number>;
     
-    boundingBox: BoundingBox;
-    boundingBoxChanged: Subject<BoundingBox> = new Subject<BoundingBox>();
+    offset: Offset;
+    offsetChanged: Subject<Offset> = new Subject<Offset>();
 
     private segmentChanged: Observable<ElementRef>;
     private segmentChangedSubscription: Subscription;
@@ -71,8 +71,8 @@ export class Chunk {
         if(segments.filter(e => e.elementRef.getValue() == null).length > 0)
             return false;
         let newBoundingBox = this.positionService.boundingBox(segments.map(e => e.elementRef.getValue().nativeElement));
-        this.boundingBoxChanged.next(newBoundingBox);
-        this.boundingBox = newBoundingBox;
+        this.offsetChanged.next(newBoundingBox);
+        this.offset = newBoundingBox;
         return true;
     }
 
