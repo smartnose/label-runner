@@ -5,7 +5,7 @@ import { Segment, Chunk } from '../models';
 @Component({
   selector: 'sd-label',
   moduleId: module.id,
-  template: `<div class="label top" [ngStyle]="{top: position.top, left: position.left, display: display}">
+  template: `<div class="label top" [ngStyle]="{top: position.top, left: position.left, display: display, position:absolute}">
         <div class="label-arrow"></div>
         <div class="label-inner">
             {{ content }}
@@ -22,13 +22,13 @@ export class LabelComponent implements OnChanges {
     private _labelSection: Chunk;
     private segments: Segment[];
 
-    constructor(public element:ElementRef, 
+    constructor(public elementRef:ElementRef, 
                 private _ngZone: NgZone,
                 private _positionService:PositionService, 
                 private _changeDetectionRef : ChangeDetectorRef) {
         this.display = 'block';
         this.content = 'hello world';
-        console.log(element);
+        console.log(elementRef);
         let self = this;
     }
 

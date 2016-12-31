@@ -7,6 +7,7 @@ export class BoundingBox {
     height: number;
     top: number;
     left: number;
+    relativeToView: boolean;
 }
 
 export class AbsolutePosition {
@@ -42,7 +43,8 @@ export class PositionService {
          width : right - left,
          height : bottom - top,
          top: top,
-         left: left
+         left: left,
+         relativeToView: true
      };
   }
 
@@ -65,7 +67,8 @@ export class PositionService {
       width: boundingClientRect.width || nativeEl.offsetWidth,
       height: boundingClientRect.height || nativeEl.offsetHeight,
       top: elBCR.top - offsetParentBCR.top,
-      left: elBCR.left - offsetParentBCR.left
+      left: elBCR.left - offsetParentBCR.left,
+      relativeToView: false
     };
   }
 
@@ -79,30 +82,52 @@ export class PositionService {
       width: boundingClientRect.width || nativeEl.offsetWidth,
       height: boundingClientRect.height || nativeEl.offsetHeight,
       top: boundingClientRect.top + (this.window.pageYOffset || this.document.documentElement.scrollTop),
-      left: boundingClientRect.left + (this.window.pageXOffset || this.document.documentElement.scrollLeft)
+      left: boundingClientRect.left + (this.window.pageXOffset || this.document.documentElement.scrollLeft),
+      relativeToView: true
     };
   }
 
   /**
+   * Convert a bounding box in relative to the parent of a target element
+   * 
    * We can extract the bounding box of an element relative to the view port
    * When we set its position, the position is relative to its 'positioned'
    * parent. Here we convert the former to the later.
    */
-  public convertDirectOffsetToRelative(boundingBox: BoundingBox, positionedParent:any):BoundingBox {
-    let converted: BoundingBox;
+  public shiftToParent(boundingBox: BoundingBox, targetEl:any):BoundingBox {
+    if(!boundingBox.relativeToView) {
+        throw "the bounding box is already relative to parent. No need to conert"
+    }
 
+    let converted: BoundingBox;
     let offsetParentBCR = {top: 0, left: 0};
+    let positionedParent = this.parentOffsetEl(targetEl)
     offsetParentBCR = this.offset(positionedParent);
 
     converted = {
         top: boundingBox.top - offsetParentBCR.top,
         left: boundingBox.left - offsetParentBCR.left,
         width: boundingBox.width,
-        height: boundingBox.height
+        height: boundingBox.height,
+        relativeToView: false
     };
 
     return converted;
   }
+
+  /**
+   * Shift the source bounding box so it sits on top of the target box
+   */
+  public alignOnTop(source: BoundingBox, target: BoundingBox): BoundingBox {
+    return {
+        top: target.top - source.height,
+        left: target.left - (source.width - target.width)/2,
+        width: source.width,
+        height: source.height,
+        relativeToView: source.relativeToView
+    }
+  }
+
   private get window():any {
     return window;
   }

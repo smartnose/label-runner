@@ -5,12 +5,16 @@
   <button type="submit">Parse</button>
 </form>
 
-<div *ngIf="segmentedLine">
-  <div><sd-segment *ngFor="let seg of segmentedLine.segments" [segment]="seg"></sd-segment></div>
-</div>
-<div *ngIf="labelSections">
-  <sd-chunk *ngFor="let chunk of labelSections" [chunk]="chunk"></sd-chunk>
+<div style="position: absolute; margin-top: 100px; margin-left: 100px; margin-bottom: 100px">
+  <div *ngIf="segmentedLine">
+    <div><sd-segment *ngFor="let seg of segmentedLine.segments" [segment]="seg"></sd-segment></div>
+  </div>
+  <div *ngIf="labelSections">
+    <sd-chunk *ngFor="let chunk of labelSections" [chunk]="chunk"></sd-chunk>
+  </div>
 </div>
 
-<h2>JSON returned from server:<h2>
-<div>{{temp}}</div>
+<!--
+<div style="position:absolute">JSON returned from server:</div>
+<div style="position:absolute">{{temp}}</div>
+-->

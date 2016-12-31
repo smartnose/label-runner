@@ -26,10 +26,10 @@ export class AdornerComponent {
     isSelected: boolean = false;
     @Input() labelSection: Chunk;
     @Input() position: AbsolutePosition;
-    constructor(public element:ElementRef) {
+    constructor(public elementRef:ElementRef) {
         this.display = 'block';
         this.content = 'hello world';
-        console.log(element);
+        console.log(elementRef);
         var self = this;
     }
     
