@@ -8,9 +8,9 @@ import { NavbarComponent } from './navbar/index';
 import { ParserService } from './parser/index';
 import { PositionService } from './position/position.service';
 import { SegmentComponent } from './segment/segment.component';
-import { LabelComponent } from './label/label.component';
-import { AdornerComponent } from './label/adorner.component';
-import { ChunkComponent } from './label/chunk.component';
+import { LabelComponent } from './labeling/label.component';
+import { AdornerComponent } from './labeling/adorner.component';
+import { ChunkComponent } from './labeling/chunk.component';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.

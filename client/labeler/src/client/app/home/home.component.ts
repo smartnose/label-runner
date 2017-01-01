@@ -26,11 +26,10 @@ export class HomeComponent implements OnInit, AfterViewChecked {
   errorMessage: string;
   query: string = '';
   segmentedLine: SegmentedQuery;
-  temp: string;
   private childIndex: number;
   private labelComponents:Promise<ComponentRef<any>>[];
   private adornerComponents:Promise<ComponentRef<any>>[];
-  private labelSections: Chunk[];
+  private chunks: Chunk[];
   private _labelComponentFactory: ComponentFactory<LabelComponent>;
   private _adonerComponentFacotry: ComponentFactory<AdornerComponent>;
 
@@ -64,9 +63,8 @@ export class HomeComponent implements OnInit, AfterViewChecked {
       .subscribe(
         segmentedLine => { 
           this.segmentedLine = segmentedLine;
-          this.temp = JSON.stringify(segmentedLine);
-          this.labelSections = [];
-          this.labelSections.push(new Chunk(0, 0, "label", this.segmentedLine, this._positionService));
+          this.chunks = [];
+          this.chunks.push(new Chunk(0, 0, "label", this.segmentedLine, this._positionService));
         },
         error =>this.errorMessage = <any>error
       )

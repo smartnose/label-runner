@@ -18,9 +18,7 @@ import { AboutComponent } from './about/about.component';
 import { ToolbarComponent } from './shared/toolbar/toolbar.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SegmentComponent } from './shared/segment/segment.component';
-import { LabelComponent } from './shared/label/label.component'
-import { AdornerComponent } from './shared/label/adorner.component'
-import { ChunkComponent } from './shared/label/chunk.component';
+import { LabelComponent, AdornerComponent, ChunkComponent } from './shared/index';
 
 export function main() {
 

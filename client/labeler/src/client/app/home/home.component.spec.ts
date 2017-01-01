@@ -11,84 +11,14 @@ import {
   Http, HttpModule
 } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
+import { mockSegmentedQuery } from '../shared/contract.spec'
 
 import { ParserService, PositionService, CSegmentedQuery, SegmentedQuery, Segmentation, Segment } from '../shared/index';
-import {SharedModule} from '../shared/shared.module'
+import { SharedModule } from '../shared/shared.module'
 import { HomeModule } from './home.module';
 import { HomeComponent } from './index';
 
-let segmentedQuery = {
-  "query": "a b c",
-  "segmentation": {
-    "segments": [
-      {
-        "start": {
-          "row": 0,
-          "col": 0,
-          "offset": 0
-        },
-        "end": {
-          "row": 0,
-          "col": 0,
-          "offset": 0
-        },
-        "kind": 0
-      },
-      {
-        "start": {
-          "row": 0,
-          "col": 1,
-          "offset": 1
-        },
-        "end": {
-          "row": 0,
-          "col": 1,
-          "offset": 1
-        },
-        "kind": 1
-      },
-      {
-        "start": {
-          "row": 0,
-          "col": 2,
-          "offset": 2
-        },
-        "end": {
-          "row": 0,
-          "col": 2,
-          "offset": 2
-        },
-        "kind": 0
-      },
-      {
-        "start": {
-          "row": 0,
-          "col": 3,
-          "offset": 3
-        },
-        "end": {
-          "row": 0,
-          "col": 3,
-          "offset": 3
-        },
-        "kind": 1
-      },
-      {
-        "start": {
-          "row": 0,
-          "col": 4,
-          "offset": 4
-        },
-        "end": {
-          "row": 0,
-          "col": 4,
-          "offset": 4
-        },
-        "kind": 0
-      }
-    ]
-  }
-};
+let segmentedQuery = mockSegmentedQuery;
 
 export function main() {
   describe('Home component', () => {

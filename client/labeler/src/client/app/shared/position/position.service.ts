@@ -6,7 +6,7 @@ import {
 /**
  * Offset of an HTML element.
  */
-class Offset {
+export class Offset {
     width: number;
     height: number;
     top: number;

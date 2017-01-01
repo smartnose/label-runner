@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { ParserService } from './parser.service';
 import { SegmentedQuery} from '../index'
+import { mockSegmentedQuery } from '../contract.spec'
 
 export function main() {
   describe('Parser Service', () => {

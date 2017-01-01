@@ -10,13 +10,14 @@ import { Subject } from 'rxjs/Subject';
  */
 @Injectable()
 export class AnnotationService {
-    selectedSection: Subject<Chunk>;
+    selectedChunkChanged: Subject<Chunk>;
+    chunksChanged: Subject<Array<Chunk>> = new Subject<Array<Chunk>>();
     private _selectedSection: Chunk;
     private _sections: Chunk[];
     constructor() {
-        this.selectedSection = new Subject<Chunk>();
+        this.selectedChunkChanged = new Subject<Chunk>();
         var self = this;
-        this.selectedSection.subscribe((newPattern) => {
+        this.selectedChunkChanged.subscribe((newPattern) => {
             if(self._selectedSection !== undefined) {
                 self._selectedSection.isSelected = false;
             }
@@ -34,7 +35,7 @@ export class AnnotationService {
     }
     public SelectLabel(labelSection: Chunk): void {
         console.log('selected label pattern:' + labelSection);
-        this.selectedSection.next(labelSection);
+        this.selectedChunkChanged.next(labelSection);
         return;
     }
     public OnKeypress(event: KeyboardEvent): void {
