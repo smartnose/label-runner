@@ -61,7 +61,7 @@ export class PositionService {
   private assertSameParent(boundingBoxes: Offset[]) {
     let parents = new Set();
     boundingBoxes.forEach((b) => {
-      parents.add(b);
+      parents.add(b.offsetParentEl);
       if(parents.size > 1)
         throw "the offset must be computed againsted the same offset parent";
     })
@@ -113,17 +113,15 @@ export class PositionService {
    * When we set its position, the position is relative to its 'positioned'
    * parent. Here we convert the former to the later.
    */
-  public shiftToParent(boundingBox: Offset, targetEl:any):OffsetText {
+  public shiftToParent(boundingBox: Offset, offsetParentEl:any):OffsetText {
     if(boundingBox.offsetParentEl !== this.window) {
         throw "the bounding box is already relative to parent. No need to conert"
     }
 
-    let shifted: Offset;
     let offsetParentBCR = {top: 0, left: 0};
-    let offsetParentEl = this.parentOffsetEl(targetEl)
     offsetParentBCR = this.offset(offsetParentEl);
 
-    shifted = {
+   let shifted = {
         top: boundingBox.top - offsetParentBCR.top,
         left: boundingBox.left - offsetParentBCR.left,
         width: boundingBox.width,
@@ -180,7 +178,7 @@ export class PositionService {
    * returns the closest, non-statically positioned parentOffset of a given element
    * @param nativeEl
    */
-  private parentOffsetEl(nativeEl:any) {
+  public parentOffsetEl(nativeEl:any) {
     let offsetParent = nativeEl.offsetParent || this.document;
     while (offsetParent && offsetParent !== this.document &&
     this.isStaticPositioned(offsetParent)) {

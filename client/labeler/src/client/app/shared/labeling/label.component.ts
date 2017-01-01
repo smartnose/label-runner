@@ -7,9 +7,9 @@ import { Segment, Chunk } from '../models';
   moduleId: module.id,
   template: `<div class="label top" [ngStyle]="{top: offset.top, left: offset.left, display: block}">
         <div class="label-arrow"></div>
-        <div class="label-inner">
+        <span class="label-inner">
             {{ content }}
-        </div>
+        </span>
       </div>`,
   styleUrls: ['labeling.css']
 })

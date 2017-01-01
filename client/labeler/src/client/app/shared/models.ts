@@ -50,6 +50,7 @@ export class Chunk {
     
     offset: Offset;
     offsetChanged: Subject<Offset> = new Subject<Offset>();
+    segments: Segment[];
 
     private segmentChanged: Observable<ElementRef>;
     private segmentChangedSubscription: Subscription;
@@ -140,18 +141,16 @@ export class Chunk {
     private updateSegments() {
         var segs = this.segmentedQuery.segments;
 
-        let segments = segs.slice(this.start, this.end + 1);
+        this.segments = segs.slice(this.start, this.end + 1);
 
         if(this.segmentChangedSubscription) 
             this.segmentChangedSubscription.unsubscribe();
 
-        let subjects = segments.map(e => e.elementRef);
+        let subjects = this.segments.map(e => e.elementRef);
         this.segmentChanged = Observable.merge(...subjects);
         this.segmentChangedSubscription = this.segmentChanged.subscribe(() => {
             console.log('try update bounding box')
-            this.tryUpdateBoundingBox(segments);
+            this.tryUpdateBoundingBox(this.segments);
         })
     }
-
-  
 }

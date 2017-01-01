@@ -38,14 +38,28 @@ export class ChunkComponent implements AfterViewInit, AfterViewChecked {
         if(!this.chunk.offset)
             return;
 
-        this.adornerOffset = this.positionService.shiftToParent(this.chunk.offset, this._nativeElement);
+        this.adornerOffset = this.positionService.shiftToParent(this.chunk.offset, this.positionService.parentOffsetEl(this._nativeElement));
 
         if(this.labelComponent) {
-            let labelNativeElement = this.labelComponent.elementRef.nativeElement.children[0];
-            let labelBoundingBox = this.positionService.boundingBox([labelNativeElement]);
+
+            let labelNativeElement = this.labelComponent.elementRef.nativeElement;
+            let labelEl = Array.from(labelNativeElement.querySelectorAll('.label.top'))[0];
+
+            let labelBoundingBox = this.positionService.boundingBox([labelEl]);
+            console.log("label bounding box width:");
+            console.log(labelBoundingBox.width);
             let newBoundingBox = this.positionService.alignOnTop(labelBoundingBox, this.chunk.offset);
-            this.labelOffset = this.positionService.shiftToParent(newBoundingBox, this._nativeElement);
+            this.labelOffset = this.positionService.shiftToParent(newBoundingBox, this.getOffsetParent(this.chunk));
             this._changeDetect.detectChanges();
         }
+    }
+
+    private getOffsetParent(chunk: Chunk): any {
+        if(chunk.segments[0].elementRef) {
+            let nativeElement = chunk.segments[0].elementRef.getValue().nativeElement;
+            return this.positionService.parentOffsetEl(nativeElement);
+        }
+
+        return undefined;
     }
 }
