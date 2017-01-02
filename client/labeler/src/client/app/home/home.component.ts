@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
         segmentedLine => { 
           this.segmentedLine = segmentedLine;
           this.chunks = [];
-          this.chunks.push(new Chunk(0, 0, "label", this.segmentedLine, this._positionService));
+          this.segmentedLine.createChunk(0, 1, "first label");
         },
         error =>this.errorMessage = <any>error
       )

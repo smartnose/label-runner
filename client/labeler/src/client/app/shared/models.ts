@@ -15,11 +15,34 @@ import { BehaviorSubject, Subject, Subscription, Observable } from 'rxjs/Rx'
  * A segment in the segmented query
  */
 export class Segment {
-    constructor(public text: string, public kind: SegmentKind) {
-        this.elementRef = new BehaviorSubject<ElementRef>(null);
+    constructor(public readonly text: string, 
+                public readonly kind: SegmentKind, 
+                public readonly index: number) {
     }
 
-    public elementRef: BehaviorSubject<ElementRef>;
+    public assignedChunk: Chunk;
+}
+
+export class SpanLike {
+    public readonly isSegment: boolean;
+    public readonly segment: Segment;
+    public readonly chunk: Chunk;
+    
+    public static fromSegment(segment: Segment): SpanLike {
+        return {
+            isSegment: true,
+            segment: segment,
+            chunk: undefined
+        }
+    }
+
+    public static fromChunk(chunk: Chunk): SpanLike {
+        return {
+            isSegment: false,
+            segment: undefined,
+            chunk: chunk
+        }
+    }
 }
 
 /**
@@ -29,11 +52,31 @@ export class Segment {
  */
 export class SegmentedQuery {
     segments: Segment[]
+    spans: SpanLike[]
     constructor(segmentedQuery: CSegmentedQuery) {
         let query = segmentedQuery.query;
-        this.segments = segmentedQuery.segmentation.segments.map(e => {
-            return new Segment(query.substr(e.start.offset, e.end.offset - e.start.offset + 1), e.kind);
+        this.segments = segmentedQuery.segmentation.segments.map((e, idx) => {
+            return new Segment(query.substr(e.start.offset, e.end.offset - e.start.offset + 1), e.kind, idx);
         });
+        this.spans = this.segments.map((s) => SpanLike.fromSegment(s));
+    }
+
+    public createChunk(start: number, end: number, label: string) {
+        if(end < start)
+            throw "The end must not be smaller than the start";
+        this.validateIndex(start, "start");
+        this.validateIndex(end, "end");
+        let startIdx = this.spans.findIndex(span => span.isSegment && !span.segment.assignedChunk && span.segment.index === start);
+        let endIdx = this.spans.findIndex(span => span.isSegment && !span.segment.assignedChunk && span.segment.index === end);
+        let sliced = this.spans.slice(startIdx, endIdx + 1).map(s => s.segment);
+        let chunk = new Chunk(label, sliced);
+
+        this.spans.splice(startIdx, endIdx - startIdx + 1, SpanLike.fromChunk(chunk));
+    }
+
+    private validateIndex(idx: number, message: string) {
+        if(idx < 0 || idx > this.segments.length - 1) 
+            throw "The index must lie within range for:" + message;
     }
 }
 
@@ -41,116 +84,13 @@ export class SegmentedQuery {
  * A continuous sequence of line segments sharing same label
  */
 export class Chunk {
-    start: number;
-    end: number;
     label: string;
     isSelected: boolean;
-    startIndexChanged: Subject<number>;
-    endIndexChanged: Subject<number>;
-    
-    offset: Offset;
-    offsetChanged: Subject<Offset> = new Subject<Offset>();
     segments: Segment[];
 
-    private segmentChanged: Observable<ElementRef>;
-    private segmentChangedSubscription: Subscription;
-
-    constructor(start: number, end: number, label: string, segmentedQuery: SegmentedQuery, private positionService: PositionService) {
-        this.start = start;
-        this.end = end;
+    constructor(label: string, segments: Segment[]) {
         this.label = label;
-        this.startIndexChanged = new Subject<number>();
-        this.endIndexChanged = new Subject<number>();
-        this.segmentedQuery = segmentedQuery;
-        this.updateSegments();
-        // this.boundingBox = positionService.boundingBox(this.segments);
-    }
-
-    private segmentedQuery: SegmentedQuery
-
-    private tryUpdateBoundingBox(segments: Segment[]): boolean {
-        if(segments.filter(e => e.elementRef.getValue() == null).length > 0)
-            return false;
-        let newBoundingBox = this.positionService.boundingBox(segments.map(e => e.elementRef.getValue().nativeElement));
-        this.offsetChanged.next(newBoundingBox);
-        this.offset = newBoundingBox;
-        return true;
-    }
-
-    /**
-     * Try updating the start index of a label pattern.
-     * The changed label pattern should not violate the constraint that no label patterns should overlap. 
-     */
-    public tryExpandLeft(neighoringPatterns: Chunk[]): void {
-        var newStart = this.findAlphaNumericSegmentOnTheLeft(this.start);
-        if(newStart < 0 || this.containedInNeighoringPatterns(newStart, neighoringPatterns)) {
-            return;
-        }
-        this.start = newStart;
-        this.updateSegments();
-        this.startIndexChanged.next(newStart);
-    }
-    public tryShrinkLeft(neighoringPatterns: Chunk[]): void {
-        var newStart = this.findAlphaNumericSegmentOnTheRight(this.start);
-        if(newStart < 0 || newStart > this.end || this.containedInNeighoringPatterns(newStart, neighoringPatterns)) {
-            return;
-        }
-        this.start = newStart;
-        this.updateSegments();
-        this.startIndexChanged.next(newStart);
-    }
-    public tryExpandRight(neighoringPatterns: Chunk[]): void {
-        var newEnd = this.findAlphaNumericSegmentOnTheRight(this.end);
-        if(newEnd < 0 || newEnd >= this.segmentedQuery.segments.length || this.containedInNeighoringPatterns(newEnd, neighoringPatterns)) {
-            return;
-        }
-        this.end = newEnd;
-        this.updateSegments();
-        this.endIndexChanged.next(newEnd);
-    }
-    public tryShrinkRight(neighoringPatterns: Chunk[]): void {
-        var newEnd = this.findAlphaNumericSegmentOnTheLeft(this.end);
-        if(newEnd < 0 || newEnd < this.start || this.containedInNeighoringPatterns(newEnd, neighoringPatterns)) {
-            return;
-        }
-        this.end = newEnd;
-        this.updateSegments();
-        this.endIndexChanged.next(newEnd);
-    }
-    private containedInNeighoringPatterns(position: number, neighoringPatterns: Chunk[]): boolean {
-        return neighoringPatterns.findIndex((pattern) => pattern !== this && pattern.start <= position && pattern.end >= position) >= 0;
-    }
-    private findAlphaNumericSegmentOnTheLeft(position: number): number {
-        var segments = this.segmentedQuery.segments;
-        for(var i = position - 1; i >=0; i --) {
-            if(segments[i].kind === SegmentKind.Token) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    private findAlphaNumericSegmentOnTheRight(position: number): number {
-        var segments = this.segmentedQuery.segments;
-        for(var i = position + 1; i < segments.length; i ++) {
-            if(segments[i].kind === SegmentKind.Token) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    private updateSegments() {
-        var segs = this.segmentedQuery.segments;
-
-        this.segments = segs.slice(this.start, this.end + 1);
-
-        if(this.segmentChangedSubscription) 
-            this.segmentChangedSubscription.unsubscribe();
-
-        let subjects = this.segments.map(e => e.elementRef);
-        this.segmentChanged = Observable.merge(...subjects);
-        this.segmentChangedSubscription = this.segmentChanged.subscribe(() => {
-            console.log('try update bounding box')
-            this.tryUpdateBoundingBox(this.segments);
-        })
+        this.segments = segments;
+        segments.forEach(e => e.assignedChunk = this);
     }
 }

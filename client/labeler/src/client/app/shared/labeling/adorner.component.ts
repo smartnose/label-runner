@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input } from '@angular/core';
 import { OffsetText} from '../position/position.service';
-import { AnnotationService} from '../annotation/annotation.service';
 import { Segment, Chunk} from '../models';
 
 @Component({
@@ -11,12 +10,9 @@ import { Segment, Chunk} from '../models';
     (click)="clicked();"
     [ngClass]="{selected:isSelected}"
     [ngStyle]="{top: offset.top, left: offset.left, width: offset.width, height: offset.height, display: display}"
+    ngbTooltip="You see, I show up on click!"
+    triggers="click:blur"
     >
-  </div>
-  <div class="label adorner shadow" 
-    (click)="clicked();" 
-    [ngClass]="{selected:isSelected}"
-    [ngStyle]="{top: offset.top, left: offset.left, width: offset.width, height: offset.height, display: display}">
   </div>`,
   styleUrls: ['labeling.css']
 })
@@ -27,7 +23,7 @@ export class AdornerComponent {
     @Input() labelSection: Chunk;
     @Input() offset: OffsetText;
     constructor(public elementRef:ElementRef) {
-        this.display = 'block';
+        this.display = 'inline-block';
         this.content = 'hello world';
         console.log(elementRef);
         var self = this;

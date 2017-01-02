@@ -7,7 +7,6 @@ import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 import { ParserService } from './parser/index';
 import { PositionService } from './position/position.service';
-import { SegmentComponent } from './segment/segment.component';
 import { LabelComponent } from './labeling/label.component';
 import { AdornerComponent } from './labeling/adorner.component';
 import { ChunkComponent } from './labeling/chunk.component';
@@ -19,9 +18,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [CommonModule, RouterModule, NgbModule],
-  declarations: [ToolbarComponent, NavbarComponent, SegmentComponent, LabelComponent, AdornerComponent, ChunkComponent],
-  exports: [ToolbarComponent, NavbarComponent, 
-    SegmentComponent, LabelComponent, AdornerComponent,
+  declarations: [ToolbarComponent, NavbarComponent, LabelComponent, AdornerComponent, ChunkComponent],
+  exports: [ToolbarComponent, NavbarComponent, LabelComponent, AdornerComponent,
     ChunkComponent,
     CommonModule, FormsModule, RouterModule]
 })

@@ -7,9 +7,6 @@
 
 <div style="position: absolute; margin-top: 100px; margin-left: 100px; margin-bottom: 100px">
   <div *ngIf="segmentedLine">
-    <div><sd-segment *ngFor="let seg of segmentedLine.segments" [segment]="seg"></sd-segment></div>
-  </div>
-  <div *ngIf="chunks">
-    <sd-chunk *ngFor="let chunk of chunks" [chunk]="chunk"></sd-chunk>
+    <span *ngFor="let span of segmentedLine.spans"><span *ngIf="span.isSegment">{{span.segment.text}}</span><sd-chunk *ngIf="!span.isSegment" [chunk]="span.chunk"></sd-chunk></span>
   </div>
 </div>
