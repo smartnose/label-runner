@@ -8,4 +8,4 @@ export * from './config/env.config';
 export * from './contract';
 export * from './models';
 export * from './labeling/chunk.component';
-export * from './position/position.service';
+export * from './labeling/labeling.service';

@@ -7,6 +7,6 @@
 
 <div style="position: absolute; margin-top: 100px; margin-left: 100px; margin-bottom: 100px">
   <div *ngIf="segmentedLine">
-    <span *ngFor="let span of segmentedLine.spans"><span *ngIf="span.isSegment">{{span.segment.text}}</span><sd-chunk *ngIf="!span.isSegment" [chunk]="span.chunk"></sd-chunk></span>
+    <span *ngFor="let span of segmentedLine.spans" class="span-like"><span *ngIf="span.isSegment">{{span.segment.text}}</span><sd-chunk *ngIf="!span.isSegment" [chunk]="span.chunk"></sd-chunk></span>
   </div>
 </div>

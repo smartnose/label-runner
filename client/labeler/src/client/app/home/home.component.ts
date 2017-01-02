@@ -9,7 +9,7 @@ import {
   NgZone,
   ViewContainerRef 
 } from '@angular/core';
-import { ParserService, PositionService, SegmentedQuery, Chunk } from '../shared/index';
+import { ParserService, LabelingService, SegmentedQuery, Chunk } from '../shared/index';
 
 
 /**
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
    *
    * @param {ParserService} parserService - The injected ParserService.
    */
-  constructor(public parserService: ParserService) {                 
+  constructor(public parserService: ParserService, private _labelingService: LabelingService) {                 
   }
 
   /**
@@ -55,6 +55,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
           this.segmentedLine = segmentedLine;
           this.chunks = [];
           this.segmentedLine.createChunk(0, 1, "first label");
+          this._labelingService.reset(this.segmentedLine);
         },
         error =>this.errorMessage = <any>error
       )

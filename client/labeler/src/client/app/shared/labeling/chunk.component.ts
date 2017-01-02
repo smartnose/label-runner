@@ -1,7 +1,6 @@
 
 
 import {Component, ElementRef, Input, Output, OnChanges, AfterViewInit, ViewChild, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
-import {PositionService, Offset, OffsetText} from '../position/position.service';
 import {Segment, Chunk} from '../models';
 import { Subscription} from 'rxjs/Rx';
 import { LabelingService } from './labeling.service'
@@ -9,7 +8,8 @@ import { LabelingService } from './labeling.service'
 @Component({
   selector: 'sd-chunk',
   moduleId: module.id,
-  template: `<span [style.background]="color" class="chunk" [class.highlighted]="chunk.isSelected" ngbTooltip="popover" #tooltip="ngbTooltip" triggers="manual" (click)='onClick()'>`+
+  template: `<template #tipContent>{{chunk.label}}</template>` + 
+            `<span [style.background]="color" class="chunk" [class.highlighted]="chunk.isSelected" [ngbTooltip]="tipContent" #tooltip="ngbTooltip" triggers="manual" (click)='onClick()'>`+
                 `<span *ngFor="let seg of this.chunk.segments">{{seg.text}}</span>` + 
             `</span>`,
   styleUrls: ['labeling.css']

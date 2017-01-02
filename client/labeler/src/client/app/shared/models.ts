@@ -1,6 +1,5 @@
 import { ElementRef } from '@angular/core';
 import { CSegmentedQuery, SegmentKind } from './contract';
-import { Offset, OffsetText, PositionService } from './position/position.service';
 import { BehaviorSubject, Subject, Subscription, Observable } from 'rxjs/Rx'
 
 /**
