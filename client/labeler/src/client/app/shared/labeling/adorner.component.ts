@@ -10,7 +10,8 @@ import { Segment, Chunk} from '../models';
   <div class="label adorner"
     (click)="clicked();"
     [ngClass]="{selected:isSelected}"
-    [ngStyle]="{top: offset.top, left: offset.left, width: offset.width, height: offset.height, display: display}">
+    [ngStyle]="{top: offset.top, left: offset.left, width: offset.width, height: offset.height, display: display}"
+    >
   </div>
   <div class="label adorner shadow" 
     (click)="clicked();" 
