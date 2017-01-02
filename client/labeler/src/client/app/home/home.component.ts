@@ -23,7 +23,7 @@ import { ParserService, PositionService, SegmentedQuery, Chunk } from '../shared
 })
 export class HomeComponent implements OnInit, AfterViewChecked {
   errorMessage: string;
-  query: string = '';
+  query: string = 'these violent delights have violent ending';
   segmentedLine: SegmentedQuery;
   private childIndex: number;
   private labelComponents:Promise<ComponentRef<any>>[];

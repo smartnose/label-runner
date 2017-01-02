@@ -91,6 +91,7 @@ export class Chunk {
     constructor(label: string, segments: Segment[]) {
         this.label = label;
         this.segments = segments;
+        this.isSelected = false;
         segments.forEach(e => e.assignedChunk = this);
     }
 }

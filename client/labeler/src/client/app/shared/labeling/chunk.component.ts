@@ -3,17 +3,37 @@
 import {Component, ElementRef, Input, Output, OnChanges, AfterViewInit, ViewChild, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import {PositionService, Offset, OffsetText} from '../position/position.service';
 import {Segment, Chunk} from '../models';
-import {Subscription} from 'rxjs/Rx';
+import { Subscription} from 'rxjs/Rx';
+import { LabelingService } from './labeling.service'
 
 @Component({
   selector: 'sd-chunk',
   moduleId: module.id,
-  template: `<span style="background-color:yellow;" class="chunk" ngbTooltip="popover" #t="ngbTooltip" (click)="t.open()" triggers="manual"><span *ngFor="let seg of this.chunk.segments">{{seg.text}}</span></span>`,
+  template: `<span [style.background]="color" class="chunk" [class.highlighted]="chunk.isSelected" ngbTooltip="popover" #tooltip="ngbTooltip" triggers="manual" (click)='onClick()'>`+
+                `<span *ngFor="let seg of this.chunk.segments">{{seg.text}}</span>` + 
+            `</span>`,
   styleUrls: ['labeling.css']
 })
-export class ChunkComponent {
+export class ChunkComponent implements AfterViewChecked {
     @Input() chunk: Chunk;
-    constructor() {
-        
+
+    // In theory, we can use strongly typed NgbTooltip class, but
+    // ng2-boostrap type definition is not well organized for the
+    // moment.
+    @ViewChild('tooltip') tooltip: any;
+    color: string;
+    constructor(private _changeDetect:ChangeDetectorRef, 
+                private _labelingService: LabelingService) {
+        let c = 255;
+        this.color = c.toString(16);
+    }
+
+    ngAfterViewChecked() {
+        this.tooltip.open();
+        this._changeDetect.detectChanges();
+    }
+
+    onClick() {
+        this._labelingService.selectChunk(this.chunk);
     }
 }

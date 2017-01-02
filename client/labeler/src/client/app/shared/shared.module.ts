@@ -6,9 +6,10 @@ import { RouterModule } from '@angular/router';
 import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 import { ParserService } from './parser/index';
-import { PositionService } from './position/position.service';
+import { LabelingService } from './labeling/labeling.service';
 import { ChunkComponent } from './labeling/chunk.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -25,7 +26,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [ ParserService, PositionService ]
+      providers: [ ParserService, LabelingService ]
     };
   }
 }

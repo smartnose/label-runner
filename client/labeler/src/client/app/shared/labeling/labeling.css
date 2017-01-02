@@ -1,8 +1,10 @@
 .chunk {
   max-width: 200px;
-  color: #fff;
   text-align: center;
-  background-color: #000;
   border-radius: 4px;
+}
+
+.highlighted{
+  background-color: blue;
 }
 
