@@ -7,7 +7,5 @@ export * from './toolbar/index';
 export * from './config/env.config';
 export * from './contract';
 export * from './models';
-export * from './labeling/label.component';
-export * from './labeling/adorner.component';
 export * from './labeling/chunk.component';
 export * from './position/position.service';
