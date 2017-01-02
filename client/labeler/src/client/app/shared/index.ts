@@ -9,3 +9,4 @@ export * from './contract';
 export * from './models';
 export * from './labeling/chunk.component';
 export * from './labeling/labeling.service';
+export * from './labeling/labeling.component';

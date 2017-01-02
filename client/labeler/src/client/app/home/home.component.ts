@@ -1,15 +1,10 @@
 import { 
   Component, 
-  ComponentRef,
-  ComponentFactory,
-  ComponentFactoryResolver,
   OnInit, 
   AfterViewChecked,
-  Injector,
-  NgZone,
-  ViewContainerRef 
 } from '@angular/core';
 import { ParserService, LabelingService, SegmentedQuery, Chunk } from '../shared/index';
+import { Subject } from "rxjs";
 
 
 /**
@@ -24,11 +19,6 @@ import { ParserService, LabelingService, SegmentedQuery, Chunk } from '../shared
 export class HomeComponent implements OnInit, AfterViewChecked {
   errorMessage: string;
   query: string = 'these violent delights have violent ending';
-  segmentedLine: SegmentedQuery;
-  private childIndex: number;
-  private labelComponents:Promise<ComponentRef<any>>[];
-  private adornerComponents:Promise<ComponentRef<any>>[];
-  private chunks: Chunk[];
 
   /**
    * Creates an instance of the HomeService with the injected
@@ -52,10 +42,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
     this.parserService.get(this.query)
       .subscribe(
         segmentedLine => { 
-          this.segmentedLine = segmentedLine;
-          this.chunks = [];
-          this.segmentedLine.createChunk(0, 1, "first label");
-          this._labelingService.reset(this.segmentedLine);
+          this._labelingService.reset(segmentedLine);
         },
         error =>this.errorMessage = <any>error
       )

@@ -7,6 +7,7 @@ import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 import { ParserService } from './parser/index';
 import { LabelingService } from './labeling/labeling.service';
+import { LabelingComponent } from './labeling/labeling.component';
 import { ChunkComponent } from './labeling/chunk.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -17,9 +18,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [CommonModule, RouterModule, NgbModule],
-  declarations: [ToolbarComponent, NavbarComponent, ChunkComponent],
+  declarations: [ToolbarComponent, NavbarComponent, ChunkComponent, LabelingComponent],
   exports: [ToolbarComponent, NavbarComponent,
     ChunkComponent,
+    LabelingComponent,
     CommonModule, FormsModule, RouterModule]
 })
 export class SharedModule {

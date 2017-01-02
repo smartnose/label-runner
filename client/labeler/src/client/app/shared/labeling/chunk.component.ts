@@ -22,6 +22,7 @@ export class ChunkComponent implements AfterViewChecked {
     // moment.
     @ViewChild('tooltip') tooltip: any;
     color: string;
+    
     constructor(private _changeDetect:ChangeDetectorRef, 
                 private _labelingService: LabelingService) {
         let c = 255;
