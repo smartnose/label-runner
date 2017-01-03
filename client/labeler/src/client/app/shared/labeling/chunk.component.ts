@@ -3,18 +3,19 @@
 import {Component, ElementRef, Input, Output, OnChanges, AfterViewInit, ViewChild, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import {Segment, Chunk} from '../models';
 import { Subscription} from 'rxjs/Rx';
-import { LabelingService } from './labeling.service'
+import { LabelingService } from './labeling.service';
+import { PaletteService } from './palette.service';
 
 @Component({
   selector: 'sd-chunk',
   moduleId: module.id,
   template: `<template #tipContent>{{chunk.label}}</template>` + 
-            `<span [style.background]="color" class="chunk" [class.highlighted]="chunk.isSelected" [ngbTooltip]="tipContent" #tooltip="ngbTooltip" triggers="manual" (click)='onClick()'>`+
+            `<span [ngStyle]="{'background-color': color}" class="chunk" [ngbTooltip]="tipContent" #tooltip="ngbTooltip" triggers="manual" (click)='onClick()'>`+
                 `<span *ngFor="let seg of this.chunk.segments">{{seg.text}}</span>` + 
             `</span>`,
   styleUrls: ['labeling.css']
 })
-export class ChunkComponent implements AfterViewChecked {
+export class ChunkComponent implements AfterViewChecked, OnChanges {
     @Input() chunk: Chunk;
 
     // In theory, we can use strongly typed NgbTooltip class, but
@@ -22,11 +23,11 @@ export class ChunkComponent implements AfterViewChecked {
     // moment.
     @ViewChild('tooltip') tooltip: any;
     color: string;
-    
+
     constructor(private _changeDetect:ChangeDetectorRef, 
-                private _labelingService: LabelingService) {
-        let c = 255;
-        this.color = c.toString(16);
+                private _labelingService: LabelingService,
+                private _palatteService: PaletteService) {
+        this.color = _palatteService.getDefaultColor();
     }
 
     ngAfterViewChecked() {
@@ -34,7 +35,20 @@ export class ChunkComponent implements AfterViewChecked {
         this._changeDetect.detectChanges();
     }
 
+    ngOnChanges() {
+        this.color = this._palatteService.getChunkColor(this.chunk);
+    }
+
     onClick() {
         this._labelingService.selectChunk(this.chunk);
+        let self = this;
+        let subscription = this._labelingService.selectionChanged.subscribe((c)=> {
+            if(c !== self.chunk) {
+                subscription.unsubscribe();
+                self.color = self._palatteService.getChunkColor(self.chunk);
+                self._changeDetect.detectChanges();
+            }
+        });
+        this.color = this._palatteService.getChunkColor(this.chunk);
     }
 }

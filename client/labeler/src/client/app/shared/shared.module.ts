@@ -7,6 +7,7 @@ import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 import { ParserService } from './parser/index';
 import { LabelingService } from './labeling/labeling.service';
+import { PaletteService } from './labeling/palette.service';
 import { LabelingComponent } from './labeling/labeling.component';
 import { ChunkComponent } from './labeling/chunk.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +29,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [ ParserService, LabelingService ]
+      providers: [ ParserService, LabelingService, PaletteService ]
     };
   }
 }

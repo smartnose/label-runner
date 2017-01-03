@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Chunk } from '../index'
 
 @Injectable()
 export class PaletteService {
@@ -6,8 +7,11 @@ export class PaletteService {
 
   }
 
-  public getLabelColor(label: String): string {
-    let c = 255;
-    return c.toString(16);
+  public getDefaultColor(): string {
+    return "rgb(255, 255, 255)";
+  }
+
+  public getChunkColor(chunk: Chunk): string {
+    return chunk.isSelected ? "rgb(0, 0, 255)" : "rgb(170, 255, 0)";
   }
 }

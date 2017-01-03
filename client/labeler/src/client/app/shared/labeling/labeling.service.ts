@@ -9,6 +9,7 @@ export class LabelingService {
   private _selectedChunk: Chunk;
   private _segmentedQuery: SegmentedQuery;
   public readonly queryChanged: Subject<SegmentedQuery> = new Subject<SegmentedQuery>();
+  public readonly selectionChanged: Subject<Chunk> = new Subject<Chunk>();
   private _defaultLabel: string = "default label";
 
   public reset(segmentedQuery: SegmentedQuery) {
@@ -21,12 +22,13 @@ export class LabelingService {
   }
 
   public selectChunk(chunk: Chunk){
-    chunk.isSelected = true;
     if(this._selectedChunk) {
       this._selectedChunk.isSelected = false;
     }
 
+    chunk.isSelected = true;
     this._selectedChunk = chunk;
+    this.selectionChanged.next(chunk);
   }
 
   public createChunk(start: Segment, end: Segment) {
