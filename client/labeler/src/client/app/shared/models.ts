@@ -83,12 +83,12 @@ export class SegmentedQuery {
  * A continuous sequence of line segments sharing same label
  */
 export class Chunk {
-    label: string;
+    readonly label: BehaviorSubject<string>;
     isSelected: boolean;
     segments: Segment[];
 
     constructor(label: string, segments: Segment[]) {
-        this.label = label;
+        this.label = new BehaviorSubject<string>(label);
         this.segments = segments;
         this.isSelected = false;
         segments.forEach(e => e.assignedChunk = this);

@@ -10,9 +10,9 @@ import { PaletteService } from './palette.service';
   selector: 'sd-chunk',
   moduleId: module.id,
   template: `<template #tipContent>
-                <span class="label" *ngIf="!chunk.isSelected">{{chunk.label}}</span>
+                <span class="label" *ngIf="!chunk.isSelected">{{chunk.label|async}}</span>
                 <!--If selected, allow user to edit the label-->
-                <input type="text" *ngIf="chunk.isSelected" class="form-control" [(ngModel)]="chunk.label" />
+                <input type="text" *ngIf="chunk.isSelected" class="form-control" [ngModel]="chunk.label.getValue()" (ngModelChange)="onLabelChange($event)" />
             </template>` + 
             // The template below must not have any blanks or new lines
             // between the elements.
@@ -57,5 +57,9 @@ export class ChunkComponent implements AfterViewChecked, OnChanges {
             }
         });
         this.color = this._palatteService.getChunkColor(this.chunk);
+    }
+
+    onLabelChange(newLabel: string) {
+        this.chunk.label.next(newLabel);
     }
 }
