@@ -10,7 +10,14 @@ export class LabelingService {
   private _segmentedQuery: SegmentedQuery;
   public readonly queryChanged: Subject<SegmentedQuery> = new Subject<SegmentedQuery>();
   public readonly selectionChanged: Subject<Chunk> = new Subject<Chunk>();
-  private _defaultLabel: string = "default label";
+  private _defaultLabel: string = "create a label here";
+
+  // Keep track of all the labels entered so far to power typeahead.
+  // TODO - refactor it out to something like typeahead service
+  // For the moment, we only use whatever the user has entered for typeahead.
+  // Once the user refreshes a page, these entries are lost.
+  // In the future, we want to store them on the server side per user basis.
+  public readonly labels = new Array<string>();
 
   public reset(segmentedQuery: SegmentedQuery) {
     this._segmentedQuery = segmentedQuery;

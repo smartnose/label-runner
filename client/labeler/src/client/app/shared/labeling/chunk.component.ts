@@ -9,7 +9,14 @@ import { PaletteService } from './palette.service';
 @Component({
   selector: 'sd-chunk',
   moduleId: module.id,
-  template: `<template #tipContent><span class="label">{{chunk.label}}</span></template>` + 
+  template: `<template #tipContent>
+                <span class="label" *ngIf="!chunk.isSelected">{{chunk.label}}</span>
+                <!--If selected, allow user to edit the label-->
+                <input type="text" *ngIf="chunk.isSelected" class="form-control" [(ngModel)]="chunk.label" />
+            </template>` + 
+            // The template below must not have any blanks or new lines
+            // between the elements.
+            // Otherwise browers will not display a sentence correctly.
             `<span [ngStyle]="{'background-color': color}" class="chunk" [ngbPopover]="tipContent" #popover="ngbPopover" triggers="manual" (click)='onClick()'>`+
                 `<span *ngFor="let seg of this.chunk.segments">{{seg.text}}</span>` + 
             `</span>`,

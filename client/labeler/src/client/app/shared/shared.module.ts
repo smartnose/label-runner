@@ -18,12 +18,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
  */
 
 @NgModule({
-  imports: [CommonModule, RouterModule, NgbModule],
+  imports: [CommonModule, RouterModule, NgbModule, FormsModule],
   declarations: [ToolbarComponent, NavbarComponent, ChunkComponent, LabelingComponent],
-  exports: [ToolbarComponent, NavbarComponent,
+  exports: [
+    ToolbarComponent, 
+    NavbarComponent,
     ChunkComponent,
     LabelingComponent,
-    CommonModule, FormsModule, RouterModule]
+    CommonModule, 
+    FormsModule, 
+    RouterModule]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
