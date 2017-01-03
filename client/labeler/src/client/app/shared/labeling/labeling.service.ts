@@ -3,6 +3,15 @@ import { Injectable } from '@angular/core';
 import { Chunk, SegmentedQuery, Segment } from '../index';
 import { Subject } from "rxjs/Subject";
 
+interface Map<T> {
+    [K: string]: T;
+}
+
+class Tuple {
+  key: string;
+  priority: number;
+}
+
 @Injectable()
 export class LabelingService {
   // The chunk currently in focus
@@ -17,7 +26,9 @@ export class LabelingService {
   // For the moment, we only use whatever the user has entered for typeahead.
   // Once the user refreshes a page, these entries are lost.
   // In the future, we want to store them on the server side per user basis.
-  public readonly labels = new Array<string>();
+  public labels = new Array<string>();
+  private readonly _labelSet: any = {};
+  private _labelTally: number = 0;
 
   public reset(segmentedQuery: SegmentedQuery) {
     this._segmentedQuery = segmentedQuery;
@@ -39,8 +50,15 @@ export class LabelingService {
   }
 
   public createChunk(start: Segment, end: Segment) {
-    var startIdx = Math.min(start.index, end.index);
-    var endIdx = Math.max(start.index, end.index);
-    this._segmentedQuery.createChunk(startIdx, endIdx, this._defaultLabel);
+    let startIdx = Math.min(start.index, end.index);
+    let endIdx = Math.max(start.index, end.index);
+    let chunk = this._segmentedQuery.createChunk(startIdx, endIdx, this._defaultLabel);
+    chunk.labelSubscription = chunk.label.subscribe((label) => {
+      let priority = this._labelSet[label];
+      this._labelTally ++;
+      this._labelSet[label] = this._labelTally;
+    })
+
+    this.labels = Object.entries(this._labelSet).sort((a, b) => b[1] - a[1]).map(e => e[0]);
   }
 }

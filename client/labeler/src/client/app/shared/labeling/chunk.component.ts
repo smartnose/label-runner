@@ -2,7 +2,7 @@
 
 import {Component, ElementRef, Input, Output, OnChanges, AfterViewInit, ViewChild, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import {Segment, Chunk} from '../models';
-import { Subscription} from 'rxjs/Rx';
+import { Subscription, Observable} from 'rxjs/Rx';
 import { LabelingService } from './labeling.service';
 import { PaletteService } from './palette.service';
 
@@ -12,7 +12,7 @@ import { PaletteService } from './palette.service';
   template: `<template #tipContent>
                 <span class="label" *ngIf="!chunk.isSelected">{{chunk.label|async}}</span>
                 <!--If selected, allow user to edit the label-->
-                <input type="text" *ngIf="chunk.isSelected" class="form-control" [ngModel]="chunk.label.getValue()" (ngModelChange)="onLabelChange($event)" />
+                <input type="text" *ngIf="chunk.isSelected" class="form-control" [ngbTypeahead]="search" [ngModel]="chunk.label.getValue()" (ngModelChange)="onLabelChange($event)" />
             </template>` + 
             // The template below must not have any blanks or new lines
             // between the elements.
@@ -61,5 +61,19 @@ export class ChunkComponent implements AfterViewChecked, OnChanges {
 
     onLabelChange(newLabel: string) {
         this.chunk.label.next(newLabel);
+    }
+
+    /**
+     * We use arrow function here, so 'this' can be properly 
+     * bound to the component object. Otherwise, this is undefined.
+     * See documentation of typeahead call back function.
+     */
+    search = (text$: Observable<string>) => {
+        let service = this._labelingService;
+        return text$.debounceTime(200)
+                    .distinctUntilChanged()
+                    .map(term => term.length < 1 ? [] : service.labels.filter(v => new RegExp(term, 'gi')
+                                                                      .test(v))
+                                                                      .splice(0, 10));
     }
 }
