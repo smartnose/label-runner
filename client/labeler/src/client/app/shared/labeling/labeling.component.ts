@@ -15,6 +15,7 @@ import { Subject } from "rxjs";
   moduleId: module.id,
   selector: 'sd-labeling',
   templateUrl: 'labeling.component.html',
+  styleUrls: ['labeling.css']
 })
 export class LabelingComponent {
   segmentedQuery: SegmentedQuery;

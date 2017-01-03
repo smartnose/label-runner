@@ -9,8 +9,8 @@ import { PaletteService } from './palette.service';
 @Component({
   selector: 'sd-chunk',
   moduleId: module.id,
-  template: `<template #tipContent>{{chunk.label}}</template>` + 
-            `<span [ngStyle]="{'background-color': color}" class="chunk" [ngbTooltip]="tipContent" #tooltip="ngbTooltip" triggers="manual" (click)='onClick()'>`+
+  template: `<template #tipContent><span class="label">{{chunk.label}}</span></template>` + 
+            `<span [ngStyle]="{'background-color': color}" class="chunk" [ngbPopover]="tipContent" #popover="ngbPopover" triggers="manual" (click)='onClick()'>`+
                 `<span *ngFor="let seg of this.chunk.segments">{{seg.text}}</span>` + 
             `</span>`,
   styleUrls: ['labeling.css']
@@ -18,10 +18,10 @@ import { PaletteService } from './palette.service';
 export class ChunkComponent implements AfterViewChecked, OnChanges {
     @Input() chunk: Chunk;
 
-    // In theory, we can use strongly typed NgbTooltip class, but
+    // In theory, we can use strongly typed NgbPopover class, but
     // ng2-boostrap type definition is not well organized for the
     // moment.
-    @ViewChild('tooltip') tooltip: any;
+    @ViewChild('popover') popover: any;
     color: string;
 
     constructor(private _changeDetect:ChangeDetectorRef, 
@@ -31,7 +31,7 @@ export class ChunkComponent implements AfterViewChecked, OnChanges {
     }
 
     ngAfterViewChecked() {
-        this.tooltip.open();
+        this.popover.open();
         this._changeDetect.detectChanges();
     }
 
