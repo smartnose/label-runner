@@ -17,6 +17,8 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { ToolbarComponent } from './shared/toolbar/toolbar.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+import { ChunkComponent, LabelingComponent, LabelingService } from './shared/index';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 export function main() {
 
@@ -28,9 +30,11 @@ export function main() {
     ];
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [FormsModule, RouterTestingModule.withRoutes(config)],
+        imports: [FormsModule, NgbModule, RouterTestingModule.withRoutes(config)],
         declarations: [TestComponent, ToolbarComponent,
           NavbarComponent, AppComponent,
+          ChunkComponent,
+          LabelingComponent,
           HomeComponent, AboutComponent],
         providers: [
           { provide: APP_BASE_HREF, useValue: '/' }

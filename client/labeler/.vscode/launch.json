@@ -23,6 +23,28 @@
       "sourceMapPathOverrides": {
         "app/*": "${webRoot}/app/*"
       }
+    },
+    {
+      "name": "Launch gulp test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
+      "stopOnEntry": true,
+      "args": [
+        "test"
+      ],
+      "cwd": "${workspaceRoot}/src/",
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "NODE_ENV": "testing"
+      },
+      "externalConsole": false,
+      "sourceMaps": true,
+      "outDir": null
     }
   ]
 }

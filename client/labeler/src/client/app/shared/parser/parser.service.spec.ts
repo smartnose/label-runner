@@ -4,6 +4,8 @@ import { MockBackend } from '@angular/http/testing';
 import { Observable } from 'rxjs/Observable';
 
 import { ParserService } from './parser.service';
+import { SegmentedQuery} from '../index'
+import { mockSegmentedQuery } from '../contract.spec'
 
 export function main() {
   describe('Parser Service', () => {
@@ -111,10 +113,11 @@ export function main() {
     });
 
     it('should resolve to client side segmented line when get called', () => {
-      let segmentedLine: any;
-      initialResponse.subscribe((data: any) => segmentedLine = data);
-      // console.log(JSON.stringify(segmentedLine))
-      expect(JSON.stringify(segmentedLine)).toEqual('{"segments":[{"text":"a","kind":0},{"text":" ","kind":1},{"text":"b","kind":0},{"text":" ","kind":1},{"text":"c","kind":0}]}');
+      let converted: any;
+      initialResponse.subscribe((data: any) => converted = data);
+      let segmentedQuery = <SegmentedQuery>converted;
+      expect(segmentedQuery.spans.length).toBe(segmentedQuery.segments.length);
+      expect(segmentedQuery.segments.length).toBe(5);
     });
   });
 }

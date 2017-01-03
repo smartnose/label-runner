@@ -1,13 +1,8 @@
 <p>Type a sentence here and begin labelling</p>
 
 <form (submit)="parse()">
-  <input [(ngModel)]="query" name="query" placeholder="hello world">
+  <input [(ngModel)]="query" name="query">
   <button type="submit">Parse</button>
 </form>
 
-<div *ngIf="segmentedLine">
-  <div><span *ngFor="let seg of segmentedLine.segments">{{seg.text}}</span></div>
-</div>
-
-<h2>JSON returned from server:<h2>
-<div>{{temp}}</div>
+<sd-labeling></sd-labeling>

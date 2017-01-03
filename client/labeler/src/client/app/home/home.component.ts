@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ParserService, SegmentedLine } from '../shared/index';
+import { 
+  Component, 
+  OnInit, 
+  AfterViewChecked,
+} from '@angular/core';
+import { ParserService, LabelingService, SegmentedQuery, Chunk } from '../shared/index';
+import { Subject } from "rxjs";
+
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -8,13 +14,11 @@ import { ParserService, SegmentedLine } from '../shared/index';
   moduleId: module.id,
   selector: 'sd-home',
   templateUrl: 'home.component.html',
-  styleUrls: ['home.component.css'],
+  styleUrls: ['home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewChecked {
   errorMessage: string;
-  query: string = '';
-  segmentedLine: SegmentedLine;
-  temp: string;
+  query: string = 'these violent delights have violent ending';
 
   /**
    * Creates an instance of the HomeService with the injected
@@ -22,7 +26,8 @@ export class HomeComponent implements OnInit {
    *
    * @param {ParserService} parserService - The injected ParserService.
    */
-  constructor(public parserService: ParserService) {}
+  constructor(public parserService: ParserService, private _labelingService: LabelingService) {                 
+  }
 
   /**
    * Initializes
@@ -30,13 +35,14 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     
   }
+  ngAfterViewChecked() {
+  }
   
   parse() {
     this.parserService.get(this.query)
       .subscribe(
         segmentedLine => { 
-          this.segmentedLine = segmentedLine;
-          this.temp = JSON.stringify(segmentedLine) 
+          this._labelingService.reset(segmentedLine);
         },
         error =>this.errorMessage = <any>error
       )

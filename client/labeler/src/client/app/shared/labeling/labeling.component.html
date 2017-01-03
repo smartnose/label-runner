@@ -1,0 +1,5 @@
+<div style="position: absolute; margin-top: 50px; margin-left: 50px; margin-right: 50px">
+  <div *ngIf="segmentedQuery" style="margin-right: 50px">
+    <span *ngFor="let span of segmentedQuery.spans" class="span-like"><span *ngIf="span.isSegment" (mousedown)="onMouseDown(span)" (mouseup)="onMouseUp(span)">{{span.segment.text}}</span><sd-chunk *ngIf="!span.isSegment" [chunk]="span.chunk"></sd-chunk></span>
+  </div>
+</div>

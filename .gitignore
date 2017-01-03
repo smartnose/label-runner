@@ -3,4 +3,5 @@ server/parser-service/target
 server/parser-service/bin
 server/parser-service/libexec
 target
+**/npm-debug.log
 
