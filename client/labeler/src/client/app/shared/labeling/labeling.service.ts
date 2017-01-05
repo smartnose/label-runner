@@ -49,6 +49,14 @@ export class LabelingService {
     this.selectionChanged.next(chunk);
   }
 
+  public unselect() {
+    if(this._selectedChunk) {
+      this._selectedChunk.isSelected = false;
+      this._selectedChunk = undefined;
+      this.selectionChanged.next(undefined);
+    }
+  }
+
   public createChunk(start: Segment, end: Segment) {
     let startIdx = Math.min(start.index, end.index);
     let endIdx = Math.max(start.index, end.index);

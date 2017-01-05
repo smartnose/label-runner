@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Chunk } from '../index'
 
+/**
+ * Providing coloring scheme for labels.
+ * For example, a user might want "Verb" to be displayed in a 
+ * different color than "Adjective".
+ * The service is currently a dumb stub waiting to be implemented.
+ */
 @Injectable()
 export class PaletteService {
   constructor() {
