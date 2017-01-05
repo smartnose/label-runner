@@ -60,7 +60,7 @@ export class SegmentedQuery {
         this.spans = this.segments.map((s) => SpanLike.fromSegment(s));
     }
 
-    public createChunk(start: number, end: number, label: string) {
+    public createChunk(start: number, end: number, label: string): Chunk {
         if(end < start)
             throw "The end must not be smaller than the start";
         this.validateIndex(start, "start");
@@ -69,8 +69,9 @@ export class SegmentedQuery {
         let endIdx = this.spans.findIndex(span => span.isSegment && !span.segment.assignedChunk && span.segment.index === end);
         let sliced = this.spans.slice(startIdx, endIdx + 1).map(s => s.segment);
         let chunk = new Chunk(label, sliced);
-
-        this.spans.splice(startIdx, endIdx - startIdx + 1, SpanLike.fromChunk(chunk));
+        let spanLike = SpanLike.fromChunk(chunk);
+        this.spans.splice(startIdx, endIdx - startIdx + 1, spanLike);
+        return chunk;
     }
 
     private validateIndex(idx: number, message: string) {
@@ -84,9 +85,11 @@ export class SegmentedQuery {
  */
 export class Chunk {
     readonly label: BehaviorSubject<string>;
-    isSelected: boolean;
-    segments: Segment[];
+    readonly segments: Segment[];
 
+    isSelected: boolean;
+    labelSubscription: Subscription;
+    
     constructor(label: string, segments: Segment[]) {
         this.label = new BehaviorSubject<string>(label);
         this.segments = segments;
