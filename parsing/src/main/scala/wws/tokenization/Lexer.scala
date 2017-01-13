@@ -10,35 +10,23 @@ import scala.util.parsing.input.{OffsetPosition, Position}
   * Created by weil1 on 11/25/16.
   */
 object Lexer extends Lexical with ImplicitConversions with Tokens {
-  override type Token = TokenMatchBase
 
-  override def token = TokenParser
+  override def token = number | TokenParser
 
-  override def errorToken(msg: String): Token = {
-    errorTokenMatch(new ErrorToken(msg))
+  override def errorToken(msg: String): ErrorToken = {
+    new ErrorToken(msg)
   }
 
-  def left(pos: OffsetPosition) = {
-    new OffsetPosition(pos.source, pos.offset - 1)
-  }
+  private def validTokenEnding(input: Input) = isWhitespace(input.first) || input.first == EofCh
 
-  def right(pos: OffsetPosition) = {
-    new OffsetPosition(pos.source, pos.offset + 1)
-  }
+  object TokenParser extends Parser[Token] {
 
-  implicit def position2offsetPosition(position: Position) = {
-    require(position.isInstanceOf[OffsetPosition])
-    position.asInstanceOf[OffsetPosition]
-  }
-
-  object TokenParser extends Parser[TokenMatch] {
-
-    def apply(input: Input): ParseResult[TokenMatch] = {
+    def apply(input: Input): ParseResult[Token] = {
       var rest = input
 
       @tailrec
       def foldRight(in: Input, chars: Seq[Char]): Seq[Char] = {
-        if (isWhitespace(in.first) || in.first == EofCh)
+        if (validTokenEnding(in))
           chars
         else {
           rest = in.rest
@@ -52,7 +40,7 @@ object Lexer extends Lexical with ImplicitConversions with Tokens {
 
       val tokenStr = chars.mkString
       val token = new RawToken(tokenStr);
-      new Success(new TokenMatch(token, input.pos, left(rest.pos)), rest)
+      new Success(token, rest)
     }
   }
 }

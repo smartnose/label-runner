@@ -10,3 +10,8 @@ You will need the following tools installed:
 1. Checkout label-runner github repository
 2. Start the backend: Open a terminal, go to $(repository_root)/server-lite/parser-service, and run command "sbt run".
 3. Start the front-end: Open a terminal, go to $(repository_root)/client/labeler, type "npm run start.deving"
+
+# Contribute
+# Run tests before merging
+Sbt tests: `$(Repo)/scala-tests.sh`
+(TODO) integration tests

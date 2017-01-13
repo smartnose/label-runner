@@ -3,7 +3,7 @@ package wws.labeling.engine
 import wws.labeling.client._
 import wws.tokenization.Lexer
 
-import scala.util.parsing.input.{OffsetPosition}
+import scala.util.parsing.input.{CharArrayReader, OffsetPosition}
 import spray.json._
 import LabelerJsonProtocal._
 
@@ -24,6 +24,7 @@ object Engine {
     segment(query, tokens)
   }
 
+  // TODO - allow client extend the code base using their own tokenizer implementation
   def tokenize(query: String) = {
     val scanner = new Scanner(query)
     extractTokens(scanner, List.empty[TokenMatch])
