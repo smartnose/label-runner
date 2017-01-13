@@ -11,11 +11,13 @@ import scala.util.parsing.input.{OffsetPosition, Position}
   */
 object Lexer extends Lexical with ImplicitConversions with Tokens {
 
-  override def token = TokenParser
+  override def token = number | TokenParser
 
   override def errorToken(msg: String): ErrorToken = {
     new ErrorToken(msg)
   }
+
+  private def validTokenEnding(input: Input) = isWhitespace(input.first) || input.first == EofCh
 
   object TokenParser extends Parser[Token] {
 
@@ -24,7 +26,7 @@ object Lexer extends Lexical with ImplicitConversions with Tokens {
 
       @tailrec
       def foldRight(in: Input, chars: Seq[Char]): Seq[Char] = {
-        if (isWhitespace(in.first) || in.first == EofCh)
+        if (validTokenEnding(in))
           chars
         else {
           rest = in.rest

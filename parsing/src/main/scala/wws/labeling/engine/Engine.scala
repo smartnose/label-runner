@@ -3,7 +3,7 @@ package wws.labeling.engine
 import wws.labeling.client._
 import wws.tokenization.Lexer
 
-import scala.util.parsing.input.{OffsetPosition}
+import scala.util.parsing.input.{CharArrayReader, OffsetPosition}
 import spray.json._
 import LabelerJsonProtocal._
 

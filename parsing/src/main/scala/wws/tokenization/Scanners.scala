@@ -9,7 +9,6 @@ import scala.util.parsing.input.{CharArrayReader, OffsetPosition, Position, Read
   */
 abstract class Scanners extends Parsers with Tokens {
   type Elem = Char
-
   /** This token is produced by a scanner `Scanner` when scanning failed. */
   def errorToken(msg: String): ErrorToken
 
@@ -46,9 +45,9 @@ abstract class Scanners extends Parsers with Tokens {
       case Success(_, in1) =>
         token(in1) match {
           case Success(tok, in2) => (new TokenMatch(tok, in1.pos, left(in2.pos)), in1, in2)
-          case ns: NoSuccess => (new TokenMatchError(errorToken(ns.msg)), ns.next, skip(ns.next))
+          case ns: NoSuccess => (new TokenMatch(errorToken(ns.msg), in1.pos, in1.pos), ns.next, skip(ns.next))
         }
-      case ns: NoSuccess => (new TokenMatchError(errorToken(ns.msg)), ns.next, skip(ns.next))
+      case ns: NoSuccess => (new TokenMatch(errorToken(ns.msg), in.pos, ns.next.pos), ns.next, skip(ns.next))
     }
 
     private def skip(in: Reader[Char]) = if (in.atEnd) in else in.rest

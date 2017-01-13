@@ -16,6 +16,17 @@ abstract class Lexical extends Scanners {
     ch <= ' ' && ch != EofCh
   }
 
+  def tokenEndingGuard = Parser { in =>
+    if (in.atEnd) Success(0, in)
+    else {
+      val ch = in.first
+      if(isWhitespace(ch) || ch == EofCh)
+        Success(ch, in)
+      else
+        Failure("not a valid ending position for the token", in)
+    }
+  }
+
   // see `whitespace in `Scanners`
   // TODO - generalize this to separators to include commas or any other custommized symbols
   // These symbols should be loaded dynamically from user plugin.
@@ -24,12 +35,31 @@ abstract class Lexical extends Scanners {
   /** A character-parser that matches a white-space character (and returns it). */
   def whitespaceChar = elem("space char", ch => isWhitespace(ch))
 
-  def number = opt(sign) ~ intPart ~ opt(fracPart) ~ opt(expPart) ^^ { case s ~ i ~ f ~ e =>
-    val tokenText = optString("", s) + i + optString(".", f) + optString("", e)
-    f match {
-      case None => IntegerLit(tokenText, tokenText.toInt)
-      case _ => FloatLit(tokenText, tokenText.toDouble)
+  def number = opt(sign) ~ (floatNumber | integerNumber) ^^ {
+    case s ~ n => {
+      val factor = s match {
+        case Some(letter) => if(letter == '-') -1 else 1
+        case _ => 1
+      }
+      val prefix = s.getOrElse("")
+      n match {
+        case IntegerLit(i, v) => IntegerLit(prefix + i, v * factor)
+        case FloatLit(f, v) => FloatLit(prefix + f, v * factor)
+      }
     }
+  }
+
+  def integerNumber = intPart <~ tokenEndingGuard ^^ {
+    case i => IntegerLit(i, i.toInt)
+  }
+
+  def floatNumber = intPart ~ fracPart ~ expPart <~ tokenEndingGuard ^^ { case i ~ f ~ e =>
+      val tokenText = i + "." + f + e
+      FloatLit(tokenText, tokenText.toDouble)
+  } | intPart ~ fracPart ^^ {
+    case i ~ f =>
+      val tokenText = i + "." + f
+      FloatLit(tokenText, tokenText.toDouble)
   }
 
   def intPart = zero | intList
