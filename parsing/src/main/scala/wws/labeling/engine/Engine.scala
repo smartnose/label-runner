@@ -24,6 +24,7 @@ object Engine {
     segment(query, tokens)
   }
 
+  // TODO - allow client extend the code base using their own tokenizer implementation
   def tokenize(query: String) = {
     val scanner = new Scanner(query)
     extractTokens(scanner, List.empty[TokenMatch])

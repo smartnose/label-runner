@@ -1,4 +1,4 @@
-package wws.labelling.engine
+package wws.labeling.engine
 
 import org.scalatest.{Matchers, WordSpec}
 import wws.labeling.client.Segments.Segment
